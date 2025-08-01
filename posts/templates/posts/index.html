@@ -1,6 +1,22 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>Welcome to PixelPulse</h2>
-<p>This is the homepage content.</p>
+<div class="container mt-4">
+    {% if post_list %}
+        {% for post in post_list %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">{{ post.title }}</h5>
+                    <p class="card-text">
+                        <strong>Author:</strong> {{ post.author }} | 
+                        <strong>Category:</strong> {{ post.category }} | 
+                        <strong>Posted on:</strong> {{ post.created_at|date:"F j, Y" }}
+                    </p>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="text-center">No posts are available.</p>
+    {% endif %}
+</div>
 {% endblock %}
