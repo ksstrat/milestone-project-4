@@ -41,8 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'posts.apps.PostsConfig'
-
+    'posts.apps.PostsConfig',
     'crispy_forms',
     'crispy_bootstrap5',
     'django_summernote',
