@@ -39,6 +39,7 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     status = models.IntegerField(choices=((0, 'Draft'), (1, 'Published')), default=0)
+    featured_image = CloudinaryField('image', default='placeholder')
 
     class Meta:
         ordering = ['-created_at']
