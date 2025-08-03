@@ -23,6 +23,27 @@
             {% if post.url %}
                 <a href="{{ post.url }}" class="btn btn-primary mt-3" target="_blank">Go to link</a>
             {% endif %}
+
+            {% if user.is_authenticated %}
+                <h3>Leave a Comment:</h3>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ comment_form.as_p }}
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            {% endif %}
+
+            <h3 class="mt-4">Comments:</h3>
+            {% for comment in comments %}
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <p><strong>{{ comment.author }}</strong> on {{ comment.created_on|date:"F j, Y" }}</p>
+                        <p>{{ comment.body }}</p>
+                    </div>
+                </div>
+            {% empty %}
+                <p>No comments yet.</p>
+            {% endfor %}
         </div>
     </div>
 </div>
