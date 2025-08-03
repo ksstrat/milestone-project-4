@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
 <div class="container mt-4">
@@ -6,9 +7,22 @@
         {% for post in post_list %}
             <div class="card mb-3">
                 <div class="card-body">
-                    <a href="{% url 'post_detail' post.slug %}">
-                        <h5 class="card-title">{{ post.title }}</h5>
-                    </a>
+                    {% if "placeholder" in post.featured_image.url %}
+                        <img class="card-img-top" src="{% static 'images/default.jpg' %}" alt="Placeholder image" class="scale">
+                    {% else %}
+                        <img class="card-img-top" src="{{ post.featured_image.url }}" alt="{{ post.title }}" class="scale">
+                    {% endif %}
+
+                    {% if post.url %}
+                        <a href="{{ post.url }}">
+                            <h5 class="card-title">{{ post.title }}</h5>
+                        </a>
+                    {% else %}
+                        <a href="{% url 'post_detail' post.slug %}">
+                            <h5 class="card-title">{{ post.title }}</h5>
+                        </a>
+                    {% endif %}
+
                     <p class="card-text">
                         <strong>Author:</strong> {{ post.author }} | 
                         <strong>Category:</strong> {{ post.category }} | 
