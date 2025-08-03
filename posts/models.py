@@ -13,7 +13,6 @@ class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=100, unique=True, blank=True)
     description = models.TextField(blank=True)
-    featured_image = CloudinaryField('image', default='placeholder')
 
     def save(self, *args, **kwargs):
         """
