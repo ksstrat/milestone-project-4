@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
+from django.urls import revers
 from django.db.models import F, Sum
 from cloudinary.models import CloudinaryField
 
@@ -13,6 +14,9 @@ class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=100, unique=True, blank=True)
     description = models.TextField(blank=True)
+
+    def get_absolute_url(self):
+        return reverse("post_detail", kwargs={"slug": self.slug})
 
     def save(self, *args, **kwargs):
         """
