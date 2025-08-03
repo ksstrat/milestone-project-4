@@ -20,6 +20,9 @@
             <div class="post-content">
                 {{ post.content }}
             </div>
+            {% if post.url %}
+                <a href="{{ post.url }}" class="btn btn-primary mt-3" target="_blank">Go to link</a>
+            {% endif %}
         </div>
     </div>
 </div>
