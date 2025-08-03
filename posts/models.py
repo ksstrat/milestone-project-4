@@ -1,7 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
+from django.db.models import F, Sum
 
+# Model for categories
 class Category(models.Model):
     """
     Model representing a category for posts.
@@ -21,6 +23,7 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+# Model for posts
 class Post(models.Model):
     """
     Model representing a user-created post on PixelPulse.
@@ -48,3 +51,32 @@ class Post(models.Model):
         if not self.slug:
             self.slug = slugify(self.title)
         super().save(*args, **kwargs)
+
+# Model for comments
+class Comment(models.Model):
+    """
+    Model representing a user comment on a post.
+    """
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="commenter")
+    body = models.TextField()
+    approved = models.BooleanField(default=False)
+    created_on = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["created_on"]
+
+    def __str__(self):
+        return f"Comment {self.body[:50]} by {self.author}"
+    
+# Model for upvotes and downvotes on posts 
+class Vote(models.Model):
+    """
+    Model representing an upvote or downvote on a post.
+    """
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="votes")
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="votes")
+    vote_type = models.SmallIntegerField()
+
+    class Meta:
+        unique_together = ('user', 'post')
