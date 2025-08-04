@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
-from django.urls import revers
+from django.urls import reverse
 from django.db.models import F, Sum
 from cloudinary.models import CloudinaryField
 
@@ -44,7 +44,7 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return reverse("post_detail", kwargs={"slug": self.slug})
-    
+
     class Meta:
         ordering = ['-created_at']
 
