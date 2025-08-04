@@ -45,6 +45,10 @@ class Post(models.Model):
     def get_absolute_url(self):
         return reverse("post_detail", kwargs={"slug": self.slug})
 
+    @property
+    def total_votes(self):
+        return self.votes.aggregate(total_votes=Sum('vote_type'))['total_votes'] or 0
+
     class Meta:
         ordering = ['-created_at']
 
