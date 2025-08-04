@@ -15,9 +15,6 @@ class Category(models.Model):
     slug = models.SlugField(max_length=100, unique=True, blank=True)
     description = models.TextField(blank=True)
 
-    def get_absolute_url(self):
-        return reverse("post_detail", kwargs={"slug": self.slug})
-
     def save(self, *args, **kwargs):
         """
         Auto-generates a slug from the category name.
@@ -45,6 +42,9 @@ class Post(models.Model):
     status = models.IntegerField(choices=((0, 'Draft'), (1, 'Published')), default=0)
     featured_image = CloudinaryField('image', default='placeholder')
 
+    def get_absolute_url(self):
+        return reverse("post_detail", kwargs={"slug": self.slug})
+    
     class Meta:
         ordering = ['-created_at']
 
