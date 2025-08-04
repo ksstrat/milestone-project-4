@@ -28,6 +28,9 @@
                         <strong>Category:</strong> {{ post.category }} | 
                         <strong>Posted on:</strong> {{ post.created_at|date:"F j, Y" }}
                     </p>
+                    <a href="{% url 'post_detail' post.slug %}">
+                        <i class="fa-solid fa-comments"></i> {{ post.comments.count }}
+                    </a>
                 </div>
             </div>
         {% endfor %}
