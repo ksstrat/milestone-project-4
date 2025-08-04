@@ -48,10 +48,19 @@ class VoteView(View):
     """
     def post(self, request, slug, *args, **kwargs):
         post = get_object_or_404(Post, slug=slug)
-        vote_type = int(request.POST.get('vote_type'))
+        vote_type_str = request.POST.get('vote_type')
+
+        if vote_type_str is None:
+            return redirect('post_detail', slug=slug)
+
+        try:
+            vote_type = int(vote_type_str)
+        except (ValueError, TypeError):
+            return redirect('post_detail', slug=slug)
+
         user = request.user
 
-        vote, created = Vote.objects.get_or_create(user=user, post=post)
+        vote, created = Vote.objects.get_or_create(user=user, post=post, defaults={'vote_type': vote_type})
 
         if not created and vote.vote_type == vote_type:
             vote.delete()
