@@ -1,1 +1,1 @@
-web: gunicorn pixelpuls.wsgi
+web: gunicorn pixelpulse.wsgi
