@@ -1,7 +1,9 @@
+from django.views import View
 from django.views.generic import ListView, DetailView
+from django.shortcuts import redirect, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from .models import Post, Comment
+from .models import Post, Comment, Vote
 from .forms import CommentForm
 
 class PostList(ListView):
@@ -37,3 +39,27 @@ class PostDetail(DetailView):
             new_comment.save()
 
         return HttpResponseRedirect(reverse('post_detail', kwargs={'slug': self.object.slug}))
+    
+class VoteView(View):
+    """
+    Handles upvote/downvote logic for a post.
+    It takes a POST request with a vote type and the user,
+    and then creates, updates, or deletes a Vote object.
+    """
+    def post(self, request, slug, *args, **kwargs):
+        post = get_object_or_404(Post, slug=slug)
+        vote_type = int(request.POST.get('vote_type'))
+        user = request.user
+
+        vote, created = Vote.objects.get_or_create(user=user, post=post)
+
+        if not created and vote.vote_type == vote_type:
+            vote.delete()
+        elif not created and vote.vote_type != vote_type:
+            vote.vote_type = vote_type
+            vote.save()
+        else:
+            vote.vote_type = vote_type
+            vote.save()
+
+        return redirect('post_detail', slug=slug)
