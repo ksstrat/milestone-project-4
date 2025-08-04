@@ -26,6 +26,7 @@
                 {% csrf_token %}
                 <button type="submit" name="vote_type" value="-1" class="btn btn-outline-danger btn-sm ms-2">👎</button>
             </form>
+            {% endif %}
             <hr>
             <div class="post-content">
                 {{ post.content }}
