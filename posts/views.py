@@ -33,7 +33,7 @@ class PostDetail(DetailView):
         context['user_vote'] = self.object.user_vote_type(self.request.user)
         return context
     
-    @login_required
+    @method_decorator(login_required, name='post')
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         comment_form = CommentForm(data=request.POST)
