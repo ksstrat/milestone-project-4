@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.contrib import messages
 
 from .models import Post, Comment, Vote
 from .forms import CommentForm
@@ -42,6 +43,8 @@ class PostDetail(DetailView):
             new_comment.post = self.object
             new_comment.author = request.user
             new_comment.save()
+
+            messages.add_message(request, messages.SUCCESS, 'Your comment has been submitted and is awaiting approval.')
 
         return HttpResponseRedirect(reverse('post_detail', kwargs={'slug': self.object.slug}))
 
