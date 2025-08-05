@@ -16,23 +16,27 @@
                 <strong>Category:</strong> {{ post.category }} | 
                 <strong>Posted on:</strong> {{ post.created_at|date:"F j, Y" }}
             </p>
-            {% if user.is_authenticated %}
-            <form method="post" action="{% url 'vote' post.slug %}" class="d-inline-block">
-                {% csrf_token %}
-                <button type="submit" name="vote_type" value="1" 
-                    class="btn btn-sm me-2 {% if user_vote == 1 %}btn-success{% else %}btn-outline-success{% endif %}">
-                    👍
-                </button>
-            </form>
-            <span class="fs-4">{{ post.total_votes }}</span>
-            <form method="post" action="{% url 'vote' post.slug %}" class="d-inline-block">
-                {% csrf_token %}
-                <button type="submit" name="vote_type" value="-1"
-                    class="btn btn-sm ms-2 {% if user_vote == -1 %}btn-danger{% else %}btn-outline-danger{% endif %}">
-                    👎
-                </button>
-            </form>
-            {% endif %}
+            <div class="d-flex mt-3">
+                <div class="ms-auto">
+                    {% if user.is_authenticated %}
+                    <form method="post" action="{% url 'vote' post.slug %}" class="d-inline-block">
+                        {% csrf_token %}
+                        <button type="submit" name="vote_type" value="1" 
+                            class="btn btn-sm me-2 {% if user_vote == 1 %}btn-success{% else %}btn-outline-success{% endif %}">
+                            👍
+                        </button>
+                    </form>
+                    <span class="fs-4">{{ post.total_votes }}</span>
+                    <form method="post" action="{% url 'vote' post.slug %}" class="d-inline-block">
+                        {% csrf_token %}
+                        <button type="submit" name="vote_type" value="-1"
+                            class="btn btn-sm ms-2 {% if user_vote == -1 %}btn-danger{% else %}btn-outline-danger{% endif %}">
+                            👎
+                        </button>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
             <hr>
             <div class="post-content">
                 {{ post.content }}
