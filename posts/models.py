@@ -63,6 +63,15 @@ class Post(models.Model):
             self.slug = slugify(self.title)
         super().save(*args, **kwargs)
 
+    def user_vote_type(self, user):
+        if user.is_authenticated:
+            try:
+                vote = Vote.objects.get(post=self, user=user)
+                return vote.vote_type
+            except Vote.DoesNotExist:
+                return 0
+        return 0
+
 # Model for comments
 class Comment(models.Model):
     """
