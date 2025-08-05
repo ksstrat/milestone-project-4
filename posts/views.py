@@ -29,6 +29,7 @@ class PostDetail(DetailView):
         context = super().get_context_data(**kwargs)
         context['comments'] = self.object.comments.all().order_by('-created_on')
         context['comment_form'] = CommentForm()
+        context['user_vote'] = self.object.user_vote_type(self.request.user)
         return context
     
     @login_required
