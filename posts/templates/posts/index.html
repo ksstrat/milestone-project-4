@@ -28,9 +28,32 @@
                         <strong>Category:</strong> {{ post.category }} | 
                         <strong>Posted on:</strong> {{ post.created_at|date:"F j, Y" }}
                     </p>
-                    <a href="{% url 'post_detail' post.slug %}">
-                        <i class="fa-solid fa-comments"></i> {{ post.comments.count }}
-                    </a>
+                    <div class="d-flex justify-content-between mt-3">
+                        <div>
+                        <a href="{% url 'post_detail' post.slug %}">
+                            <i class="fa-solid fa-comments"></i> {{ post.comments.count }}
+                        </a>
+                        </div>
+                        <div>
+                            {% if user.is_authenticated %}
+                            <form method="post" action="{% url 'vote' post.slug %}" class="d-inline-block">
+                                {% csrf_token %}
+                                <button type="submit" name="vote_type" value="1" 
+                                    class="btn btn-sm me-2 {% if user_vote == 1 %}btn-success{% else %}btn-outline-success{% endif %}">
+                                    👍
+                                </button>
+                            </form>
+                            <span class="fs-4">{{ post.total_votes }}</span>
+                            <form method="post" action="{% url 'vote' post.slug %}" class="d-inline-block">
+                                {% csrf_token %}
+                                <button type="submit" name="vote_type" value="-1"
+                                    class="btn btn-sm ms-2 {% if user_vote == -1 %}btn-danger{% else %}btn-outline-danger{% endif %}">
+                                    👎
+                                </button>
+                            </form>
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
             </div>
         {% endfor %}
