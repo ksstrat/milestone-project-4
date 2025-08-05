@@ -3,6 +3,9 @@ from django.views.generic import ListView, DetailView
 from django.shortcuts import redirect, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+
 from .models import Post, Comment, Vote
 from .forms import CommentForm
 
@@ -28,6 +31,7 @@ class PostDetail(DetailView):
         context['comment_form'] = CommentForm()
         return context
     
+    @login_required
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         comment_form = CommentForm(data=request.POST)
@@ -39,7 +43,8 @@ class PostDetail(DetailView):
             new_comment.save()
 
         return HttpResponseRedirect(reverse('post_detail', kwargs={'slug': self.object.slug}))
-    
+
+@method_decorator(login_required, name='dispatch')
 class VoteView(View):
     """
     Handles upvote/downvote logic for a post.
