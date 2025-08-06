@@ -134,3 +134,16 @@ class PostDelete(UserPassesTestMixin, DeleteView):
     def test_func(self):
         post = self.get_object()
         return self.request.user == post.author
+    
+@method_decorator(login_required, name='dispatch')
+class CommentUpdate(UserPassesTestMixin, UpdateView):
+    model = Comment
+    form_class = CommentForm
+    template_name = 'posts/comment_edit.html'
+
+    def get_success_url(self):
+        return reverse('post_detail', kwargs={'slug': self.object.post.slug})
+
+    def test_func(self):
+        comment = self.get_object()
+        return self.request.user == comment.author
