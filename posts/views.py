@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import UserPassesTestMixin
+from django.contrib.auth.models import User
 from django.utils.decorators import method_decorator
 from django.contrib import messages
 
@@ -159,3 +160,11 @@ class CommentDelete(UserPassesTestMixin, DeleteView):
     def test_func(self):
         comment = self.get_object()
         return self.request.user == comment.author
+    
+@method_decorator(login_required, name='dispatch')
+class UserProfile(DetailView):
+    model = User
+    template_name = 'posts/user_profile.html'
+    context_object_name = 'user_profile'
+    slug_field = 'username'
+    slug_url_kwarg = 'username'
