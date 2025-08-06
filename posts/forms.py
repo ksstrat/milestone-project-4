@@ -1,6 +1,7 @@
 from django import forms
 from django_summernote.widgets import SummernoteWidget
 from .models import Comment, Vote, Post
+from django.contrib.auth.models import User
 
 class PostForm(forms.ModelForm):
     class Meta:
@@ -22,3 +23,10 @@ class VoteForm(forms.ModelForm):
     class Meta:
         model = Vote
         fields = ('vote_type',)
+
+class ProfileUpdateForm(forms.ModelForm):
+    email = forms.EmailField(required=True)
+
+    class Meta:
+        model = User
+        fields = ['email']
