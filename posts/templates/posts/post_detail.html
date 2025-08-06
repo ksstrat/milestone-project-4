@@ -39,7 +39,7 @@
             </div>
             <hr>
             <div class="post-content">
-                {{ post.content }}
+                {{ post.content | safe }}
             </div>
             {% if post.url %}
                 <a href="{{ post.url }}" class="btn btn-primary mt-3" target="_blank">Go to link</a>
@@ -59,7 +59,7 @@
                 <div class="card mb-2">
                     <div class="card-body">
                         <p><strong>{{ comment.author }}</strong> on {{ comment.created_on|date:"F j, Y" }}</p>
-                        <p>{{ comment.body }}</p>
+                        <p>{{ comment.body | safe }}</p>
                     </div>
                 </div>
             {% empty %}
