@@ -111,7 +111,9 @@ class PostUpdate(UpdateView):
     model = Post
     form_class = PostForm
     template_name = 'posts/post_edit.html'
-    success_url = reverse_lazy('home')
+
+    def get_success_url(self):
+        return reverse('post_detail', kwargs={'slug': self.object.slug})
 
     def form_valid(self, form):
         form.instance.author = self.request.user
