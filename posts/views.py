@@ -2,13 +2,13 @@ from django.views import View
 from django.views.generic import ListView, DetailView
 from django.shortcuts import redirect, get_object_or_404
 from django.http import HttpResponseRedirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib import messages
 
 from .models import Post, Comment, Vote
-from .forms import CommentForm
+from .forms import CommentForm, PostForm
 
 class PostList(ListView):
     """
@@ -84,3 +84,19 @@ class VoteView(View):
             vote.save()
 
         return redirect('post_detail', slug=slug)
+    
+@method_decorator(login_required, name='dispatch')
+class PostCreate(CreateView):
+    """
+    Handles the creation of a new post.
+    It renders a PostForm and saves the new post to the database
+    with the logged-in user as the author.
+    """
+    model = Post
+    form_class = PostForm
+    template_name = 'posts/post_create.html'
+    success_url = reverse_lazy('home')
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
