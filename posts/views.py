@@ -147,3 +147,15 @@ class CommentUpdate(UserPassesTestMixin, UpdateView):
     def test_func(self):
         comment = self.get_object()
         return self.request.user == comment.author
+    
+@method_decorator(login_required, name='dispatch')
+class CommentDelete(UserPassesTestMixin, DeleteView):
+    model = Comment
+    template_name = 'posts/comment_confirm_delete.html'
+
+    def get_success_url(self):
+        return reverse_lazy('post_detail', kwargs={'slug': self.object.post.slug})
+
+    def test_func(self):
+        comment = self.get_object()
+        return self.request.user == comment.author
