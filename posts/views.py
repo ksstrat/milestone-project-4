@@ -43,10 +43,13 @@ class PostDetail(DetailView):
             new_comment.post = self.object
             new_comment.author = request.user
             new_comment.save()
-
             messages.add_message(request, messages.SUCCESS, 'Your comment has been submitted and is awaiting approval.')
-
-        return HttpResponseRedirect(reverse('post_detail', kwargs={'slug': self.object.slug}))
+            return HttpResponseRedirect(reverse('post_detail', kwargs={'slug': self.object.slug}))
+        else:
+            messages.add_message(request, messages.ERROR, 'Your comment could not be submitted. The comment field cannot be empty.')
+            context = self.get_context_data()
+            context['comment_form'] = comment_form
+            return self.render_to_response(context)
 
 @method_decorator(login_required, name='dispatch')
 class VoteView(View):
