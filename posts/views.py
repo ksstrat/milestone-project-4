@@ -4,6 +4,7 @@ from django.shortcuts import redirect, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.utils.decorators import method_decorator
 from django.contrib import messages
 
@@ -120,7 +121,7 @@ class PostUpdate(UpdateView):
         return super().form_valid(form)
     
 @method_decorator(login_required, name='dispatch')
-class PostDelete(DeleteView):
+class PostDelete(UserPassesTestMixin, DeleteView):
     """
     Handles the deletion of an existing post.
     It renders a confirmation page and deletes the post upon confirmation.
@@ -130,6 +131,6 @@ class PostDelete(DeleteView):
     template_name = 'posts/post_confirm_delete.html'
     success_url = reverse_lazy('home')
 
-    def form_valid(self, form):
-        form.instance.author = self.request.user
-        return super().form_valid(form)
+    def test_func(self):
+        post = self.get_object()
+        return self.request.user == post.author
