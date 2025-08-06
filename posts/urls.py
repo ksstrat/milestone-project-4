@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import PostList, PostDetail, VoteView, PostCreate, PostUpdate, PostDelete, CommentUpdate, CommentDelete, UserProfile
+from .views import PostList, PostDetail, VoteView, PostCreate, PostUpdate, PostDelete, CommentUpdate, CommentDelete, UserProfile, UserProfileUpdate
 
 urlpatterns = [
     path('', PostList.as_view(), name='home'),
@@ -11,4 +11,5 @@ urlpatterns = [
     path('comment/edit/<int:pk>/', CommentUpdate.as_view(), name='comment_edit'),
     path('comment/delete/<int:pk>/', CommentDelete.as_view(), name='comment_delete'),
     path('profile/<str:username>/', UserProfile.as_view(), name='user_profile'),
+    path('profile/<str:username>/edit/', UserProfileUpdate.as_view(), name='user_profile_edit'),
 ]
