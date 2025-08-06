@@ -10,7 +10,7 @@ from django.utils.decorators import method_decorator
 from django.contrib import messages
 
 from .models import Post, Comment, Vote
-from .forms import CommentForm, PostForm
+from .forms import CommentForm, PostForm, ProfileUpdateForm
 
 class PostList(ListView):
     """
@@ -168,3 +168,17 @@ class UserProfile(DetailView):
     context_object_name = 'user_profile'
     slug_field = 'username'
     slug_url_kwarg = 'username'
+
+@method_decorator(login_required, name='dispatch')
+class UserProfileUpdate(UserPassesTestMixin, UpdateView):
+    model = User
+    form_class = ProfileUpdateForm
+    template_name = 'posts/user_profile_edit.html'
+    slug_field = 'username'
+    slug_url_kwarg = 'username'
+
+    def get_success_url(self):
+        return reverse('user_profile', kwargs={'username': self.request.user.username})
+
+    def test_func(self):
+        return self.request.user == self.get_object()
