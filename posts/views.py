@@ -1,5 +1,5 @@
 from django.views import View
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.shortcuts import redirect, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
@@ -95,6 +95,22 @@ class PostCreate(CreateView):
     model = Post
     form_class = PostForm
     template_name = 'posts/post_create.html'
+    success_url = reverse_lazy('home')
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+    
+@method_decorator(login_required, name='dispatch')
+class PostUpdate(UpdateView):
+    """
+    Handles the editing of an existing post.
+    It renders a PostForm pre-filled with the existing post data
+    and saves the changes to the database.
+    """
+    model = Post
+    form_class = PostForm
+    template_name = 'posts/post_edit.html'
     success_url = reverse_lazy('home')
 
     def form_valid(self, form):
