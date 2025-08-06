@@ -1,5 +1,5 @@
 from django.views import View
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.shortcuts import redirect, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
@@ -114,6 +114,21 @@ class PostUpdate(UpdateView):
 
     def get_success_url(self):
         return reverse('post_detail', kwargs={'slug': self.object.slug})
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+    
+@method_decorator(login_required, name='dispatch')
+class PostDelete(DeleteView):
+    """
+    Handles the deletion of an existing post.
+    It renders a confirmation page and deletes the post upon confirmation.
+    Only the author of the post can delete it.
+    """
+    model = Post
+    template_name = 'posts/post_confirm_delete.html'
+    success_url = reverse_lazy('home')
 
     def form_valid(self, form):
         form.instance.author = self.request.user
