@@ -63,6 +63,7 @@
                         <p>{{ comment.body | safe }}</p>
                         {% if comment.author == user %}
                             <a href="{% url 'comment_edit' comment.pk %}" class="btn btn-primary btn-sm">Edit</a>
+                            <a href="{% url 'comment_delete' comment.pk %}" class="btn btn-danger btn-sm">Delete</a>
                         {% endif %}
                     </div>
                 </div>
