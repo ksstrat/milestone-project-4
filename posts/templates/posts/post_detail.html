@@ -13,6 +13,7 @@
             <h2 class="card-title">{{ post.title }}</h2>
             {% if post.author == user %}
                 <a href="{% url 'post_edit' post.slug %}" class="btn btn-primary btn-sm">Edit Post</a>
+                <a href="{% url 'post_delete' post.slug %}" class="btn btn-danger btn-sm">Delete Post</a>
             {% endif %}
             <p class="card-text">
                 <strong>Author:</strong> {{ post.author }} | 
