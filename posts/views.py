@@ -10,7 +10,7 @@ from django.utils.decorators import method_decorator
 from django.contrib import messages
 from django.db.models import Q
 
-from .models import Post, Comment, Vote
+from .models import Post, Comment, Vote, Category
 from .forms import CommentForm, PostForm, ProfileUpdateForm
 
 class PostList(ListView):
@@ -27,6 +27,11 @@ class PostList(ListView):
         query = self.request.GET.get('q')
         if query:
             queryset = queryset.filter(Q(title__icontains=query) | Q(content__icontains=query))
+
+        category = self.request.GET.get('category')
+        if category:
+            queryset = queryset.filter(category__name=category)
+
         return queryset.filter(status=1).order_by('-created_at')
 
 class PostDetail(DetailView):
