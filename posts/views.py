@@ -30,8 +30,14 @@ class PostList(ListView):
         category = self.request.GET.get('category')
         if category and category != 'All':
             queryset = queryset.filter(category__name=category)
+
+        sort = self.request.GET.get('sort')
+        if sort == 'top':
+            queryset = queryset.order_by('-total_votes')
+        else:
+            queryset = queryset.order_by('-created_at')
         
-        return queryset.order_by('-created_at')
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
