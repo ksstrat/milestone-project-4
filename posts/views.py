@@ -17,6 +17,7 @@ class PostList(ListView):
     Displays a list of posts on the homepage.
     """
     model = Post
+    queryset = Post.objects.filter(status=1).order_by('-created_at')
     template_name = "posts/index.html"
     context_object_name = 'post_list'
 
