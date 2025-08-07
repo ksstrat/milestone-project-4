@@ -15,25 +15,24 @@ from .forms import CommentForm, PostForm, ProfileUpdateForm
 
 class PostList(ListView):
     """
-    Displays a list of posts on the homepage.
+    Displays a list of published posts on the homepage.
     """
     model = Post
-    queryset = Post.objects.filter(status=1).order_by('-created_at')
     template_name = "posts/index.html"
     context_object_name = 'post_list'
 
     def get_queryset(self):
-        queryset = super().get_queryset()
+        queryset = Post.objects.filter(status=1)
         query = self.request.GET.get('q')
         if query:
             queryset = queryset.filter(Q(title__icontains=query) | Q(content__icontains=query))
 
         category = self.request.GET.get('category')
-        if category:
+        if category and category != 'All':
             queryset = queryset.filter(category__name=category)
+        
+        return queryset.order_by('-created_at')
 
-        return queryset.filter(status=1).order_by('-created_at')
-    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['categories'] = Category.objects.all()
