@@ -30,7 +30,7 @@ class PostDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['comments'] = self.object.comments.all().order_by('-created_on')
+        context['comments'] = self.object.comments.filter(approved=True).order_by('-created_on')
         context['comment_form'] = CommentForm()
         context['user_vote'] = self.object.user_vote_type(self.request.user)
         return context
