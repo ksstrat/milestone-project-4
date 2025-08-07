@@ -31,7 +31,7 @@
                     <div class="d-flex justify-content-between mt-3">
                         <div>
                         <a href="{% url 'post_detail' post.slug %}">
-                            <i class="fa-solid fa-comments"></i> {{ post.comments.count }}
+                            <i class="fa-solid fa-comments"></i> {{ post.approved_comments_count }}
                         </a>
                         </div>
                         <div>
