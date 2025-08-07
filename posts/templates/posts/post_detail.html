@@ -1,94 +1,136 @@
-{% extends "base.html" %}
-{% load static %}
-
-{% block content %}
+{% extends "base.html" %} {% load static %} {% block content %}
 <div class="container mt-4">
-    <div class="card mb-3">
+  <div class="card mb-3">
+    <div class="card-body">
+      {% if "placeholder" in post.featured_image.url %}
+      <img
+        src="{% static 'images/default.png' %}"
+        alt="Placeholder image"
+        class="scale"
+      />
+      {% else %}
+      <img
+        src="{{ post.featured_image.url }}"
+        alt="{{ post.title }}"
+        class="scale"
+      />
+      {% endif %}
+      <h2 class="card-title">{{ post.title }}</h2>
+      {% if post.author == user %}
+      <a href="{% url 'post_edit' post.slug %}" class="btn btn-primary btn-sm"
+        >Edit Post</a
+      >
+      <a href="{% url 'post_delete' post.slug %}" class="btn btn-danger btn-sm"
+        >Delete Post</a
+      >
+      {% endif %}
+      <p class="card-text">
+        <strong>Author:</strong> {{ post.author }} |
+        <strong>Category:</strong> {{ post.category }} |
+        <strong>Posted on:</strong> {{ post.created_at|date:"F j, Y" }}
+      </p>
+      <div class="d-flex mt-3">
+        <div class="ms-auto">
+          {% if user.is_authenticated %}
+          <form
+            method="post"
+            action="{% url 'vote' post.slug %}"
+            class="d-inline-block"
+          >
+            {% csrf_token %}
+            <button
+              type="submit"
+              name="vote_type"
+              value="1"
+              class="btn btn-sm me-2 {% if user_vote == 1 %}btn-success{% else %}btn-outline-success{% endif %}"
+            >
+              👍
+            </button>
+            <span class="fs-4">{{ post.total_votes }}</span>
+            <button
+              type="submit"
+              name="vote_type"
+              value="-1"
+              class="btn btn-sm ms-2 {% if user_vote == -1 %}btn-danger{% else %}btn-outline-danger{% endif %}"
+            >
+              👎
+            </button>
+          </form>
+          {% endif %}
+        </div>
+      </div>
+      <hr />
+      <div class="post-content">{{ post.content | safe }}</div>
+      {% if post.url %}
+      <a href="{{ post.url }}" class="btn btn-primary mt-3" target="_blank"
+        >Go to link</a
+      >
+      {% endif %} {% if user.is_authenticated %}
+      <h3>Leave a Comment:</h3>
+      <form method="post">
+        {% csrf_token %} {{ comment_form.as_p }}
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+      {% endif %}
+
+      <h3 class="mt-4">Comments:</h3>
+      {% for comment in comments %}
+      <div class="card mb-2">
         <div class="card-body">
-            {% if "placeholder" in post.featured_image.url %}
-                <img src="{% static 'images/default.png' %}" alt="Placeholder image" class="scale">
-            {% else %}
-                <img src="{{ post.featured_image.url }}" alt="{{ post.title }}" class="scale">
-             {% endif %}
-            <h2 class="card-title">{{ post.title }}</h2>
-            {% if post.author == user %}
-                <a href="{% url 'post_edit' post.slug %}" class="btn btn-primary btn-sm">Edit Post</a>
-                <a href="{% url 'post_delete' post.slug %}" class="btn btn-danger btn-sm">Delete Post</a>
-            {% endif %}
-            <p class="card-text">
-                <strong>Author:</strong> {{ post.author }} | 
-                <strong>Category:</strong> {{ post.category }} | 
-                <strong>Posted on:</strong> {{ post.created_at|date:"F j, Y" }}
-            </p>
-            <div class="d-flex mt-3">
-                <div class="ms-auto">
-                    {% if user.is_authenticated %}
-                    <form method="post" action="{% url 'vote' post.slug %}" class="d-inline-block">
-                        {% csrf_token %}
-                        <button type="submit" name="vote_type" value="1" 
-                            class="btn btn-sm me-2 {% if user_vote == 1 %}btn-success{% else %}btn-outline-success{% endif %}">
-                            👍
-                        </button>
-                    <span class="fs-4">{{ post.total_votes }}</span>
-                        <button type="submit" name="vote_type" value="-1"
-                            class="btn btn-sm ms-2 {% if user_vote == -1 %}btn-danger{% else %}btn-outline-danger{% endif %}">
-                            👎
-                        </button>
-                    </form>
-                    {% endif %}
-                </div>
-            </div>
-            <hr>
-            <div class="post-content">
-                {{ post.content | safe }}
-            </div>
-            {% if post.url %}
-                <a href="{{ post.url }}" class="btn btn-primary mt-3" target="_blank">Go to link</a>
-            {% endif %}
-
-            {% if user.is_authenticated %}
-                <h3>Leave a Comment:</h3>
-                <form method="post">
-                    {% csrf_token %}
-                    {{ comment_form.as_p }}
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </form>
-            {% endif %}
-
-            <h3 class="mt-4">Comments:</h3>
-            {% for comment in comments %}
-                <div class="card mb-2">
-                    <div class="card-body">
-                        <p><strong>{{ comment.author }}</strong> on {{ comment.created_on|date:"F j, Y" }}</p>
-                        <p>{{ comment.body | safe }}</p>
-                        {% if comment.author == user %}
-                            <a href="{% url 'comment_edit' comment.pk %}" class="btn btn-primary btn-sm">Edit</a>
-                            <a href="{% url 'comment_delete' comment.pk %}" class="btn btn-danger btn-sm">Delete</a>
-                        {% endif %}
-                    </div>
-                </div>
-            {% empty %}
-                <p>No comments yet.</p>
-            {% endfor %}
+          <p>
+            <strong>{{ comment.author }}</strong> on {{
+            comment.created_on|date:"F j, Y" }}
+          </p>
+          <p>{{ comment.body | safe }}</p>
+          {% if comment.author == user %}
+          <a
+            href="{% url 'comment_edit' comment.pk %}"
+            class="btn btn-primary btn-sm"
+            >Edit</a
+          >
+          <a
+            href="{% url 'comment_delete' comment.pk %}"
+            class="btn btn-danger btn-sm"
+            >Delete</a
+          >
+          {% endif %}
         </div>
+      </div>
+      {% empty %}
+      <p>No comments yet.</p>
+      {% endfor %}
     </div>
+  </div>
 </div>
-<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="successModalLabel">Thank you!</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                {% for message in messages %}
-                    <p>{{ message }}</p>
-                {% endfor %}
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
+<div
+  class="modal fade"
+  id="successModal"
+  tabindex="-1"
+  aria-labelledby="successModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="successModalLabel">Thank you!</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        {% for message in messages %}
+        <p>{{ message }}</p>
+        {% endfor %}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
     </div>
+  </div>
 </div>
 {% endblock %}
