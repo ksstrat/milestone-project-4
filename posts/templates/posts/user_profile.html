@@ -1,23 +1,21 @@
-{% extends "base.html" %} {% block content %}
+{% extends "base.html" %}
+
+{% block content %}
 <div class="container mt-4">
-  <h1>{{ user_profile.username }}'s Profile</h1>
-  <p><strong>Email:</strong> {{ user_profile.email }}</p>
-  <p><strong>Joined:</strong> {{ user_profile.date_joined|date:"F j, Y" }}</p>
+    <h1>{{ user_profile.username }}'s Profile</h1>
+    <p><strong>Email:</strong> {{ user_profile.email }}</p>
+    <p><strong>Joined:</strong> {{ user_profile.date_joined|date:"F j, Y" }}</p>
 
-  <a href="{% url 'user_profile_edit' user.username %}" class="btn btn-primary"
-    >Edit Profile</a
-  >
-  <a href="{% url 'account_change_password' %}" class="btn btn-secondary"
-    >Change Password</a
-  >
+    <a href="{% url 'user_profile_edit' user.username %}" class="btn btn-primary">Edit Profile</a>
+    <a href="{% url 'account_change_password' %}" class="btn btn-secondary">Change Password</a>
 
-  <h3 class="mt-4">Posts</h3>
-  <ul>
+    <h3 class="mt-4">Posts</h3>
+    <ul>
     {% for post in user_profile.posts.all %}
-    <li><a href="{% url 'post_detail' post.slug %}">{{ post.title }}</a></li>
+        <li><a href="{% url 'post_detail' post.slug %}">{{ post.title }}</a></li>
     {% empty %}
-    <li>No posts found.</li>
+        <li>No posts found.</li>
     {% endfor %}
-  </ul>
+    </ul>
 </div>
 {% endblock %}
