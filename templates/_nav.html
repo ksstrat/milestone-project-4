@@ -34,8 +34,8 @@
             {% endif %}
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarSortDropdown">
-            <li><a class="dropdown-item" href="{% url 'home' %}?sort=newest">Newest</a></li>
-            <li><a class="dropdown-item" href="{% url 'home' %}?sort=top">Top</a></li>
+            <li><a class="dropdown-item" href="{% url 'home' %}?q={{ request.GET.q }}&category={{ request.GET.category }}&sort=newest">Newest</a></li>
+            <li><a class="dropdown-item" href="{% url 'home' %}?q={{ request.GET.q }}&category={{ request.GET.category }}&sort=top">Top</a></li>
           </ul>
         </li>
 		<li class="nav-item">
