@@ -48,6 +48,10 @@ class Post(models.Model):
     @property
     def total_votes(self):
         return self.votes.aggregate(total_votes=Sum('vote_type'))['total_votes'] or 0
+    
+    @property
+    def approved_comments_count(self):
+        return self.comments.filter(approved=True).count()
 
     class Meta:
         ordering = ['-created_at']
