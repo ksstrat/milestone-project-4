@@ -8,6 +8,7 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.models import User
 from django.utils.decorators import method_decorator
 from django.contrib import messages
+from django.db.models import Q
 
 from .models import Post, Comment, Vote
 from .forms import CommentForm, PostForm, ProfileUpdateForm
@@ -20,6 +21,13 @@ class PostList(ListView):
     queryset = Post.objects.filter(status=1).order_by('-created_at')
     template_name = "posts/index.html"
     context_object_name = 'post_list'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        query = self.request.GET.get('q')
+        if query:
+            queryset = queryset.filter(Q(title__icontains=query) | Q(content__icontains=query))
+        return queryset.filter(status=1).order_by('-created_at')
 
 class PostDetail(DetailView):
     """
