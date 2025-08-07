@@ -9,6 +9,7 @@ from django.contrib.auth.models import User
 from django.utils.decorators import method_decorator
 from django.contrib import messages
 from django.db.models import Q, Sum
+from django.db.models.functions import Coalesce
 
 from .models import Post, Comment, Vote, Category
 from .forms import CommentForm, PostForm, ProfileUpdateForm
@@ -31,7 +32,7 @@ class PostList(ListView):
         if category and category != 'All':
             queryset = queryset.filter(category__name=category)
 
-        queryset = queryset.annotate(votes_sum=Sum('votes__vote_type'))
+        queryset = queryset.annotate(votes_sum=Coalesce(Sum('votes__vote_type'), 0))
 
         sort = self.request.GET.get('sort')
         if sort == 'top':
