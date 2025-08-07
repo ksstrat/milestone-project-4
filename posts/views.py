@@ -8,7 +8,7 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.models import User
 from django.utils.decorators import method_decorator
 from django.contrib import messages
-from django.db.models import Q
+from django.db.models import Q, Sum
 
 from .models import Post, Comment, Vote, Category
 from .forms import CommentForm, PostForm, ProfileUpdateForm
@@ -31,9 +31,11 @@ class PostList(ListView):
         if category and category != 'All':
             queryset = queryset.filter(category__name=category)
 
+        queryset = queryset.annotate(votes_sum=Sum('votes__vote_type'))
+
         sort = self.request.GET.get('sort')
         if sort == 'top':
-            queryset = queryset.order_by('-total_votes')
+            queryset = queryset.order_by('-votes_sum')
         else:
             queryset = queryset.order_by('-created_at')
         
