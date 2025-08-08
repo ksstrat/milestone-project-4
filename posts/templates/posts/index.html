@@ -22,11 +22,21 @@
                             <h5 class="card-title">{{ post.title }}</h5>
                         </a>
                     {% endif %}
-
-                    <p class="card-text">
-                        <strong>Author:</strong> {{ post.author }} | 
-                        <strong>Category:</strong> {{ post.category }} | 
-                        <strong>Posted on:</strong> {{ post.created_at|date:"F j, Y" }}
+                    <p class="card-text d-flex align-items-center">
+                        {% if post.author.profile.avatar %}
+                            <img src="{{ post.author.profile.avatar.url }}?c_fill,w_24,h_24,r_max"
+                                class="rounded-circle me-2" width="24" height="24"
+                                alt="{{ post.author.username }} avatar">
+                        {% else %}
+                            <img src="{% static 'images/default-avatar.png' %}"
+                                class="rounded-circle me-2" width="24" height="24"
+                                alt="Default avatar">
+                        {% endif %}
+                        <span><strong>Author:</strong> {{ post.author }}</span>
+                        <span class="mx-2">|</span>
+                        <span><strong>Category:</strong> {{ post.category }}</span>
+                        <span class="mx-2">|</span>
+                        <span><strong>Posted on:</strong> {{ post.created_at|date:"F j, Y" }}</span>
                     </p>
                     <div class="d-flex justify-content-between mt-3">
                         <div>
