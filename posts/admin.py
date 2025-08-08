@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Post, Comment, Vote
+from .models import Category, Post, Comment, Vote, Profile
 from django_summernote.admin import SummernoteModelAdmin
 
 class PostAdmin(SummernoteModelAdmin):
@@ -24,6 +24,11 @@ class VoteAdmin(admin.ModelAdmin):
     list_display = ('user', 'post', 'vote_type')
     list_filter = ('vote_type',)
     search_fields = ('user__username', 'post__title')
+
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ('user',)
+    search_fields = ('user__username', 'user__email')
 
 admin.site.register(Category)
 admin.site.register(Post, PostAdmin)
