@@ -11,8 +11,8 @@ from django.contrib import messages
 from django.db.models import Q, Sum
 from django.db.models.functions import Coalesce
 
-from .models import Post, Comment, Vote, Category, SavedPost 
-from .forms import CommentForm, PostForm, ProfileUpdateForm
+from .models import Post, Comment, Vote, Category, SavedPost, Profile
+from .forms import CommentForm, PostForm, ProfileUpdateForm, ProfileForm
 
 class PostList(ListView):
     """
@@ -206,6 +206,34 @@ class UserProfileUpdate(UserPassesTestMixin, UpdateView):
 
     def get_success_url(self):
         return reverse('user_profile', kwargs={'username': self.request.user.username})
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        profile, _ = Profile.objects.get_or_create(user=self.object)
+        if 'profile_form' not in context:
+            context['profile_form'] = ProfileForm(instance=profile)
+        context['user_profile'] = self.object
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        profile, _ = Profile.objects.get_or_create(user=self.object)
+
+        user_form = self.get_form()
+        profile_form = ProfileForm(request.POST, request.FILES, instance=profile)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, 'Profile updated.')
+            return HttpResponseRedirect(self.get_success_url())
+
+        messages.error(request, 'Please correct the errors below.')
+        return self.form_invalid(user_form, profile_form)
+
+    def form_invalid(self, user_form, profile_form):
+        context = self.get_context_data(form=user_form, profile_form=profile_form)
+        return self.render_to_response(context)
 
     def test_func(self):
         return self.request.user == self.get_object()
