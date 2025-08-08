@@ -1,10 +1,20 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
 <div class="container mt-4">
-    <h1>{{ user_profile.username }}'s Profile</h1>
-    <p><strong>Email:</strong> {{ user_profile.email }}</p>
-    <p><strong>Joined:</strong> {{ user_profile.date_joined|date:"F j, Y" }}</p>
+    <div class="d-flex align-items-center mb-3">
+        {% if user_profile.profile.avatar %}
+        <img src="{{ user_profile.profile.avatar.url }}" class="rounded-circle me-3" width="64" height="64" alt="Avatar">
+        {% else %}
+        <img src="{% static 'images/default-avatar.png' %}" class="rounded-circle me-3" width="64" height="64" alt="Avatar">
+        {% endif %}
+        <div>
+            <h1 class="h4 mb-1">{{ user_profile.username }}</h1>
+            <div><strong>Email:</strong> {{ user_profile.email }}</div>
+            <div><strong>Joined:</strong> {{ user_profile.date_joined|date:"F j, Y" }}</div>
+        </div>
+    </div>
 
     <a href="{% url 'user_profile_edit' user.username %}" class="btn btn-primary">Edit Profile</a>
     <a href="{% url 'account_change_password' %}" class="btn btn-secondary">Change Password</a>
