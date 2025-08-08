@@ -120,3 +120,16 @@ class SavedPost(models.Model):
 
     def __str__(self):
         return f"{self.user.username} saved {self.post.title}"
+
+# Model for user profiles    
+class Profile(models.Model):
+    """
+    Model that holds additional user information (profile picture).
+    It extends Django's built-in User model.
+    """
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    avatar = CloudinaryField('image', blank=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'Profile of {self.user.username}'
