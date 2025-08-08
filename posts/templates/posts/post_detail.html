@@ -21,6 +21,20 @@
                 <strong>Posted on:</strong> {{ post.created_at|date:"F j, Y" }}
             </p>
             <div class="d-flex mt-3">
+                <div>
+                    {% if user.is_authenticated %}
+                    <form action="{% url 'saved_post' post.slug %}" method="post" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-secondary">
+                            {% if post in user.saved_posts.all %}
+                                Unsave
+                            {% else %}
+                                Save
+                            {% endif %}
+                        </button>
+                    </form>
+                {% endif %}
+                </div>
                 <div class="ms-auto">
                     {% if user.is_authenticated %}
                     <form method="post" action="{% url 'vote' post.slug %}" class="d-inline-block">
