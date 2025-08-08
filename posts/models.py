@@ -104,3 +104,19 @@ class Vote(models.Model):
 
     class Meta:
         unique_together = ('user', 'post')
+
+# Model for saved posts
+class SavedPost(models.Model):
+    """
+    Model representing a saved post (bookmark) by a user.
+    """
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='saved_posts')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='saved_by_users')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'post')
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.user.username} saved {self.post.title}"
