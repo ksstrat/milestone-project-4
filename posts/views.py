@@ -11,7 +11,7 @@ from django.contrib import messages
 from django.db.models import Q, Sum
 from django.db.models.functions import Coalesce
 
-from .models import Post, Comment, Vote, Category
+from .models import Post, Comment, Vote, Category, SavedPost 
 from .forms import CommentForm, PostForm, ProfileUpdateForm
 
 class PostList(ListView):
@@ -209,3 +209,17 @@ class UserProfileUpdate(UserPassesTestMixin, UpdateView):
 
     def test_func(self):
         return self.request.user == self.get_object()
+    
+@method_decorator(login_required, name='dispatch')
+class SavedPostView(View):
+    def post(self, request, slug, *args, **kwargs):
+        post = get_object_or_404(Post, slug=slug)
+        saved_post, created = SavedPost.objects.get_or_create(user=request.user, post=post)
+
+        if not created:
+            saved_post.delete()
+            messages.add_message(request, messages.INFO, 'Post has been unsaved.')
+        else:
+            messages.add_message(request, messages.SUCCESS, 'Post has been saved.')
+
+        return redirect('post_detail', slug=slug)
