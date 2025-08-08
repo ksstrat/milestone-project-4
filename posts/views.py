@@ -210,8 +210,11 @@ class UserProfileUpdate(UserPassesTestMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         profile, _ = Profile.objects.get_or_create(user=self.object)
-        if 'profile_form' not in context:
-            context['profile_form'] = ProfileForm(instance=profile)
+
+        if 'user_form' not in context and 'form' in context:
+            context['user_form'] = context['form']
+
+        context.setdefault('profile_form', ProfileForm(instance=profile))
         context['user_profile'] = self.object
         return context
 
@@ -229,7 +232,10 @@ class UserProfileUpdate(UserPassesTestMixin, UpdateView):
             return HttpResponseRedirect(self.get_success_url())
 
         messages.error(request, 'Please correct the errors below.')
-        return self.form_invalid(user_form, profile_form)
+        context = self.get_context_data()
+        context['user_form'] = user_form
+        context['profile_form'] = profile_form
+        return self.render_to_response(context)
 
     def form_invalid(self, user_form, profile_form):
         context = self.get_context_data(form=user_form, profile_form=profile_form)
