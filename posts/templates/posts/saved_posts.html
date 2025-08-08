@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>My Saved Posts</h1>
+    {% if saved_posts %}
+        <div class="row">
+            {% for saved_post in saved_posts %}
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <a href="{% url 'post_detail' saved_post.post.slug %}">
+                            <img src="{{ saved_post.post.featured_image.url }}" class="card-img-top" alt="{{ saved_post.post.title }}">
+                        </a>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ saved_post.post.title }}</h5>
+                            <p class="card-text">{{ saved_post.post.content|truncatechars:100 }}</p>
+                            <a href="{% url 'post_detail' saved_post.post.slug %}" class="btn btn-primary">Read Post</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>You have not saved any posts yet.</p>
+    {% endif %}
+</div>
+{% endblock %}
