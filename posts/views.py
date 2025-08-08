@@ -223,3 +223,12 @@ class SavedPostView(View):
             messages.add_message(request, messages.SUCCESS, 'Post has been saved.')
 
         return redirect('post_detail', slug=slug)
+    
+@method_decorator(login_required, name='dispatch')
+class SavedPostListView(View):
+    def get(self, request, *args, **kwargs):
+        saved_posts = SavedPost.objects.filter(user=request.user)
+        context = {
+            'saved_posts': saved_posts,
+        }
+        return render(request, 'posts/saved_posts.html', context)
