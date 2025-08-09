@@ -49,12 +49,20 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
     'posts.apps.PostsConfig',
     'crispy_forms',
     'crispy_bootstrap5',
     'django_summernote',
     'cloudinary',
 ]
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': ['profile', 'email'],
+        'AUTH_PARAMS': {'prompt': 'select_account'},
+    },
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
