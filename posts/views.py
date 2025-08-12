@@ -47,7 +47,7 @@ class PostList(ListView):
         context['categories'] = Category.objects.all()
         return context
 
-class PostDetail(DetailView):
+class PostDetail(UserPassesTestMixin, DetailView):
     """
     Displays the details of a single post.
     """
@@ -61,6 +61,10 @@ class PostDetail(DetailView):
         context['comment_form'] = CommentForm()
         context['user_vote'] = self.object.user_vote_type(self.request.user)
         return context
+    
+    def test_func(self):
+        post = self.get_object()
+        return post.status == 1 or self.request.user == post.author or self.request.user.is_staff
     
     @method_decorator(login_required, name='post')
     def post(self, request, *args, **kwargs):
