@@ -128,6 +128,7 @@ class PostCreate(CreateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
+        messages.success(self.request, 'Your post has been submitted and is awaiting approval.')
         return super().form_valid(form)
     
 @method_decorator(login_required, name='dispatch')
