@@ -41,7 +41,7 @@ class PostList(ListView):
 
         sort = self.request.GET.get('sort')
         if sort == 'top':
-            queryset = queryset.order_by('-votes_sum')
+            queryset = queryset.order_by('-votes_sum', '-created_at')
         else:
             queryset = queryset.order_by('-created_at')
         
