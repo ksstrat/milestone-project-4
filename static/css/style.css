@@ -1,0 +1,48 @@
+/* Google Fonts import */
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;500;700&family=Poppins:wght@600;700&display=swap');
+
+/* Global CSS variables */
+:root {
+  --background-color: #121212;
+  --text-color: #E0E0E0;
+  --border-color: #3A3A3A;
+  --font-body: "Lato", sans-serif;
+  --font-heading: "Poppins", sans-serif;
+}
+
+/* Ensure full-height layout for sticky footer */
+html, body { height: 100%; }
+
+/* Global body styles */
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-family: var(--font-body);
+
+  /* Keep footer at the bottom on short pages */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Allow main content to grow and push footer down */
+main {
+  flex: 1;
+}
+
+/* Headings use Poppins */
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: var(--font-heading);
+  line-height: 1.2;
+}
+
+/* Footer styles */
+.site-footer {
+  border-top: 1px solid var(--border-color);
+  padding: 1.5rem 0;
+}
+
+/* Muted footer links */
+.link-muted { color: #b5b5b5; }
+.link-muted:hover { color: #d0d0d0; }
