@@ -19,13 +19,24 @@
     <a href="{% url 'user_profile_edit' user.username %}" class="btn btn-primary">Edit Profile</a>
     <a href="{% url 'account_change_password' %}" class="btn btn-secondary">Change Password</a>
 
-    <h3 class="mt-4">Posts</h3>
+    <h3 class="mt-4">Published Posts</h3>
     <ul>
-    {% for post in user_profile.posts.all %}
+    {% for post in published_posts %}
         <li><a href="{% url 'post_detail' post.slug %}">{{ post.title }}</a></li>
     {% empty %}
-        <li>No posts found.</li>
+        <li>No published posts yet.</li>
     {% endfor %}
     </ul>
+
+    {% if draft_posts %}
+    <h3 class="mt-4">Your Drafts (Awaiting Approval)</h3>
+    <ul>
+    {% for post in draft_posts %}
+        <li><a href="{% url 'post_detail' post.slug %}">{{ post.title }}</a></li>
+    {% empty %}
+        <li>No drafts found.</li>
+    {% endfor %}
+    </ul>
+    {% endif %}
 </div>
 {% endblock %}
