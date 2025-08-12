@@ -205,6 +205,17 @@ class UserProfile(DetailView):
     slug_field = 'username'
     slug_url_kwarg = 'username'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_posts = Post.objects.filter(author=self.object).order_by('-created_at')
+
+        context['published_posts'] = user_posts.filter(status=1)
+
+        if self.request.user == self.object:
+            context['draft_posts'] = user_posts.filter(status=0)
+
+        return context
+
 @method_decorator(login_required, name='dispatch')
 class UserProfileUpdate(UserPassesTestMixin, UpdateView):
     model = User
