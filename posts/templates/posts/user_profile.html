@@ -3,40 +3,61 @@
 
 {% block content %}
 <div class="container mt-4">
-    <div class="d-flex align-items-center mb-3">
+  <div class="card pp-post mb-3">
+    <div class="card-body">
+      <!-- Header: Avatar + Basics -->
+      <div class="d-flex align-items-center mb-3">
         {% if user_profile.profile.avatar %}
-        <img src="{{ user_profile.profile.avatar.url }}" class="rounded-circle me-3" width="64" height="64" alt="Avatar">
+          <img src="{{ user_profile.profile.avatar.url }}"
+               class="rounded-circle me-3" width="80" height="80" alt="Avatar">
         {% else %}
-        <img src="{% static 'images/default-avatar.png' %}" class="rounded-circle me-3" width="64" height="64" alt="Avatar">
+          <img src="{% static 'images/default-avatar.png' %}"
+               class="rounded-circle me-3" width="80" height="80" alt="Avatar">
         {% endif %}
+
         <div>
-            <h1 class="h4 mb-1">{{ user_profile.username }}</h1>
-            <div><strong>Email:</strong> {{ user_profile.email }}</div>
-            <div><strong>Joined:</strong> {{ user_profile.date_joined|date:"F j, Y" }}</div>
+          <h1 class="h4 mb-1">{{ user_profile.username }}</h1>
+          <div class="small">{{ user_profile.email }}</div>
+          <div class="small text-muted">Joined: {{ user_profile.date_joined|date:"Y-m-d" }}</div>
         </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="d-flex gap-2 mb-3">
+        <a href="{% url 'user_profile_edit' user.username %}" class="btn btn-primary btn-sm">Edit Profile</a>
+        <a href="{% url 'account_change_password' %}" class="btn btn-secondary btn-sm">Change Password</a>
+      </div>
+
+      <!-- Published posts -->
+      <h2 class="h5 mt-3">Published Posts</h2>
+      {% if published_posts %}
+        <div class="list-group">
+          {% for post in published_posts %}
+            <a class="list-group-item list-group-item-action"
+               href="{% url 'post_detail' post.slug %}">
+              {{ post.title }}
+              <span class="text-muted small ms-2">· {{ post.created_at|date:"Y-m-d" }}</span>
+            </a>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="text-muted">No published posts yet.</p>
+      {% endif %}
+
+      <!-- Drafts (if any) -->
+      {% if draft_posts %}
+        <h2 class="h5 mt-4">Your Drafts (Awaiting Approval)</h2>
+        <div class="list-group">
+          {% for post in draft_posts %}
+            <a class="list-group-item list-group-item-action"
+               href="{% url 'post_detail' post.slug %}">
+              {{ post.title }}
+              <span class="text-muted small ms-2">· {{ post.created_at|date:"Y-m-d" }}</span>
+            </a>
+          {% endfor %}
+        </div>
+      {% endif %}
     </div>
-
-    <a href="{% url 'user_profile_edit' user.username %}" class="btn btn-primary">Edit Profile</a>
-    <a href="{% url 'account_change_password' %}" class="btn btn-secondary">Change Password</a>
-
-    <h3 class="mt-4">Published Posts</h3>
-    <ul>
-    {% for post in published_posts %}
-        <li><a href="{% url 'post_detail' post.slug %}">{{ post.title }}</a></li>
-    {% empty %}
-        <li>No published posts yet.</li>
-    {% endfor %}
-    </ul>
-
-    {% if draft_posts %}
-    <h3 class="mt-4">Your Drafts (Awaiting Approval)</h3>
-    <ul>
-    {% for post in draft_posts %}
-        <li><a href="{% url 'post_detail' post.slug %}">{{ post.title }}</a></li>
-    {% empty %}
-        <li>No drafts found.</li>
-    {% endfor %}
-    </ul>
-    {% endif %}
+  </div>
 </div>
 {% endblock %}

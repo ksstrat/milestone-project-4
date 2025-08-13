@@ -318,3 +318,23 @@ h1, h2, h3, h4, h5, h6,
   border-color: var(--secondary-color);
   box-shadow: none;
 }
+
+/* Profile */
+
+/* Profile: list-group inside card */
+.pp-post .list-group-item {
+  background-color: #181818;
+  color: var(--text-color);
+  border-color: var(--border-color);
+}
+.pp-post .list-group-item-action:hover,
+.pp-post .list-group-item-action:focus {
+  background-color: #222222;
+  color: #fff;
+}
+
+/* Lighter "muted" text inside cards/forms */
+.pp-post .text-muted,
+.pp-form .text-muted {
+  color: #b5b5b5 !important;
+}
