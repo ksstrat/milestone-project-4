@@ -18,7 +18,6 @@ body {
   background-color: var(--background-color);
   color: var(--text-color);
   font-family: var(--font-body);
-
   /* Keep footer at the bottom on short pages */
   min-height: 100vh;
   display: flex;
@@ -26,9 +25,7 @@ body {
 }
 
 /* Allow main content to grow and push footer down */
-main {
-  flex: 1;
-}
+main { flex: 1; }
 
 /* Headings use Poppins */
 h1, h2, h3, h4, h5, h6,
@@ -46,3 +43,167 @@ h1, h2, h3, h4, h5, h6,
 /* Muted footer links */
 .link-muted { color: #b5b5b5; }
 .link-muted:hover { color: #d0d0d0; }
+
+/* Navbar / Search */
+
+/* Bar styling */
+.pp-navbar {
+  background-color: var(--background-color);
+  border-bottom: 1px solid var(--border-color);
+  position: relative;            /* layering context */
+  z-index: 1100;                 /* above page content */
+}
+
+/* Dropdowns */
+.pp-navbar .dropdown-menu {
+  background-color: #1a1a1a;
+  border-color: var(--border-color);
+  z-index: 1120;                 /* keep over content */
+}
+.pp-navbar .dropdown-item { color: var(--text-color); }
+.pp-navbar .dropdown-item:hover,
+.pp-navbar .dropdown-item:focus,
+.pp-navbar .dropdown-item.active {
+  color: #fff;
+  background-color: #222222;
+}
+
+/* Desktop trio: [Category/Sort] [Search] [+create] */
+.pp-desktopbar {
+  gap: 0;
+  justify-content: center;
+}
+.pp-left { margin: 0; padding: 0; margin-right: .375rem; }
+.pp-create { margin-left: .375rem; }
+
+/* Pill search with icon */
+.pp-search-wrap { position: relative; }
+.pp-search-input {
+  width: clamp(320px, 50vw, 660px);
+  background-color: #1a1a1a;
+  color: var(--text-color);
+  border-color: var(--border-color);
+  border-radius: 999px;
+  padding-left: 2.6rem;
+  position: relative;
+  z-index: 1;
+}
+.pp-search-input::placeholder { color: #9aa0a6; }
+.pp-search-wrap .pp-search-icon {
+  position: absolute;
+  top: 50%;
+  left: .9rem;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #c7c7c7;
+  font-size: .95rem;
+  z-index: 2;
+}
+
+/* Create button type */
+.pp-create-btn {
+  white-space: nowrap;
+  font-family: var(--font-heading);
+}
+
+/* Mobile search trigger (label) */
+.pp-search-toggle { cursor: pointer; }
+.pp-search-toggle:focus { outline: 2px solid #4a90e2; outline-offset: 2px; }
+
+/* Desktop/Mobile visibility */
+@media (max-width: 991.98px) {
+  .pp-desktopbar { display: none !important; }
+  .pp-mobilemenu { display: block !important; }
+}
+@media (min-width: 992px) {
+  .pp-desktopbar { display: flex !important; }
+  .pp-mobilemenu { display: none !important; }
+}
+
+/* Desktop layout: grid to truly center the trio and keep right group separate */
+@media (min-width: 992px) {
+  /* turn the inner row into a 3-column grid: [left filler] [center trio] [right group] */
+  .navbar-collapse > .d-lg-flex {
+    display: grid !important;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    width: 100%;
+  }
+  /* place the trio in the center column and keep it centered */
+  .pp-desktopbar {
+    position: static;            /* remove absolute hack */
+    transform: none;
+    left: auto;
+    width: auto;
+    grid-column: 2;
+    justify-self: center;
+  }
+  /* place the right account links in the right column */
+  .navbar-collapse > .d-lg-flex > .navbar-nav.d-lg-flex {
+    grid-column: 3;
+    justify-self: end;
+  }
+}
+
+/* Mobile full-width search */
+
+/* Hidden checkbox controls visibility */
+.pp-search-checkbox { display: none; }
+
+/* Overlay bar (closed) */
+.pp-mobile-searchbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  background-color: var(--background-color);
+  border-bottom: 1px solid var(--border-color);
+  padding: .5rem .75rem;
+  transform: translateY(-110%);
+  transition: transform .2s ease;
+  z-index: 1200;
+  pointer-events: none;
+}
+
+/* Open state via checkbox */
+#ppSearchOpen:checked + .pp-mobile-searchbar {
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* Close checkbox “X” */
+.pp-search-close {
+  position: absolute;
+  top: 50%;
+  right: .6rem;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 999px;
+  background: transparent;
+  color: #c7c7c7;
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 3;
+}
+.pp-search-close:hover { background-color: #1f1f1f; color: #fff; }
+
+/* Mobile input: full width + room for close */
+.pp-mobile-search .pp-search-input {
+  width: 100%;
+  padding-right: 2.8rem;
+}
+
+/* Hide mobile search UI on desktop */
+@media (min-width: 992px) {
+  #ppSearchOpen,
+  .pp-mobile-searchbar,
+  .pp-search-toggle { display: none !important; }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .pp-mobile-searchbar { transition: none; }
+}

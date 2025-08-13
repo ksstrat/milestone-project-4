@@ -1,67 +1,191 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-dark pp-navbar">
   <div class="container-fluid">
-    <a class="navbar-brand" href="{% url 'home' %}">PixelPulse</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+    <a class="navbar-brand fw-semibold" href="{% url 'home' %}">PixelPulse</a>
+
+    <!-- Mobile controls: search icon (checkbox toggle) + burger -->
+    <div class="d-flex align-items-center ms-auto">
+      <label for="ppSearchOpen"
+            class="nav-link p-0 text-white d-lg-none me-2 pp-search-toggle"
+            role="button" tabindex="0"
+            title="Search" aria-label="Open search"
+            aria-controls="ppMobileSearchbar">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </label>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+              data-bs-target="#navbarNav" aria-controls="navbarNav"
+              aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+
+    <!-- Collapse wraps desktop + mobile menus -->
     <div class="collapse navbar-collapse" id="navbarNav">
-      <form class="d-flex" role="search" method="GET" action="{% url 'home' %}">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="q" value="{{ request.GET.q }}">
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            {% if request.GET.category and request.GET.category != 'All' %}
-              {{ request.GET.category }}
-            {% else %}
-              Categories
-            {% endif %}
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="{% url 'home' %}">All</a></li>
-            {% for category in categories %}
-              <li><a class="dropdown-item" href="{% url 'home' %}?category={{ category.name }}">{{ category.name }}</a></li>
-            {% endfor %}
+      <!-- Flex row on desktop so center + right can coexist -->
+      <div class="d-lg-flex align-items-center w-100">
+
+        <!-- DESKTOP: centered trio [Category/Sort] [Search] [+create] -->
+        <div class="pp-desktopbar d-none d-lg-flex align-items-center justify-content-center mx-lg-auto">
+          <!-- Left: Category + Sort -->
+          <ul class="navbar-nav pp-left">
+            <!-- Category dropdown -->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                 data-bs-toggle="dropdown" aria-expanded="false">
+                {% if request.GET.category and request.GET.category != 'All' %}
+                  {{ request.GET.category }}
+                {% else %}Categories{% endif %}
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li>
+                  <a class="dropdown-item {% if not request.GET.category or request.GET.category == 'All' %}active{% endif %}"
+                     href="{% url 'home' %}{% if request.GET.q or request.GET.sort %}?{% endif %}{% if request.GET.q %}q={{ request.GET.q }}{% endif %}{% if request.GET.sort %}{% if request.GET.q %}&{% endif %}sort={{ request.GET.sort }}{% endif %}">
+                    All
+                  </a>
+                </li>
+                {% for category in categories %}
+                  <li>
+                    <a class="dropdown-item {% if request.GET.category == category.name %}active{% endif %}"
+                       href="{% url 'home' %}?q={{ request.GET.q }}&category={{ category.name }}&sort={{ request.GET.sort|default:'newest' }}">
+                      {{ category.name }}
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </li>
+
+            <!-- Sort dropdown -->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarSortDropdown" role="button"
+                 data-bs-toggle="dropdown" aria-expanded="false">
+                {% if request.GET.sort == 'top' %}Top{% else %}Newest{% endif %}
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarSortDropdown">
+                <li><a class="dropdown-item {% if request.GET.sort != 'top' %}active{% endif %}"
+                       href="{% url 'home' %}?q={{ request.GET.q }}&category={{ request.GET.category }}&sort=newest">Newest</a></li>
+                <li><a class="dropdown-item {% if request.GET.sort == 'top' %}active{% endif %}"
+                       href="{% url 'home' %}?q={{ request.GET.q }}&category={{ request.GET.category }}&sort=top">Top</a></li>
+              </ul>
+            </li>
           </ul>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarSortDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            {% if request.GET.sort == 'top' %}
-              Top
-            {% else %}
-              Newest
-            {% endif %}
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarSortDropdown">
-            <li><a class="dropdown-item" href="{% url 'home' %}?q={{ request.GET.q }}&category={{ request.GET.category }}&sort=newest">Newest</a></li>
-            <li><a class="dropdown-item" href="{% url 'home' %}?q={{ request.GET.q }}&category={{ request.GET.category }}&sort=top">Top</a></li>
-          </ul>
-        </li>
-	</ul>
-      <ul class="navbar-nav ms-auto">
-        {% if user.is_authenticated %}
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'post_create' %}">Create Post</a>
+
+          <!-- Center: search (wide pill, no button) -->
+          <form class="pp-search my-2 my-lg-0" role="search" method="GET" action="{% url 'home' %}">
+            <div class="pp-search-wrap">
+              <i class="fa-solid fa-magnifying-glass pp-search-icon" aria-hidden="true"></i>
+              <label for="search_q" class="visually-hidden">Search</label>
+              <input id="search_q" class="form-control pp-search-input" type="search" placeholder="Search"
+                     name="q" value="{{ request.GET.q }}">
+              {% if request.GET.category %}<input type="hidden" name="category" value="{{ request.GET.category }}">{% endif %}
+              {% if request.GET.sort %}<input type="hidden" name="sort" value="{{ request.GET.sort }}">{% endif %}
+            </div>
+          </form>
+
+          <!-- Right (in trio): +Create -->
+          {% if user.is_authenticated %}
+            <div class="pp-create">
+              <a class="btn btn-primary btn-sm pp-create-btn"
+                 href="{% url 'post_create' %}"
+                 aria-label="Create new post">
+                <span class="fw-bold" aria-hidden="true">+</span>Create
+              </a>
+            </div>
+          {% endif %}
+        </div>
+
+        <!-- DESKTOP: right-side account/bookmark links -->
+        <ul class="navbar-nav d-none d-lg-flex ms-lg-auto align-items-lg-center gap-lg-2">
+          {% if user.is_authenticated %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'saved_posts_list' %}">Bookmarks</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'user_profile' user.username %}">Profile</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'account_logout' %}">Logout</a></li>
+          {% else %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'account_signup' %}">Register</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'account_login' %}">Login</a></li>
+          {% endif %}
+        </ul>
+
+        <!-- MOBILE: single vertical list inside the burger -->
+        <ul class="navbar-nav d-lg-none w-100 pp-mobilemenu">
+          <!-- Category dropdown -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="mNavbarDropdown" role="button"
+               data-bs-toggle="dropdown" aria-expanded="false">
+              {% if request.GET.category and request.GET.category != 'All' %}
+                Category: {{ request.GET.category }}
+              {% else %}Category{% endif %}
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="mNavbarDropdown">
+              <li>
+                <a class="dropdown-item {% if not request.GET.category or request.GET.category == 'All' %}active{% endif %}"
+                   href="{% url 'home' %}{% if request.GET.q or request.GET.sort %}?{% endif %}{% if request.GET.q %}q={{ request.GET.q }}{% endif %}{% if request.GET.sort %}{% if request.GET.q %}&{% endif %}sort={{ request.GET.sort }}{% endif %}">
+                  All
+                </a>
+              </li>
+              {% for category in categories %}
+                <li>
+                  <a class="dropdown-item {% if request.GET.category == category.name %}active{% endif %}"
+                     href="{% url 'home' %}?q={{ request.GET.q }}&category={{ category.name }}&sort={{ request.GET.sort|default:'newest' }}">
+                    {{ category.name }}
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'saved_posts_list' %}">Bookmarks</a>
+
+          <!-- Sort dropdown -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="mNavbarSortDropdown" role="button"
+               data-bs-toggle="dropdown" aria-expanded="false">
+              Sort: {% if request.GET.sort == 'top' %}Top{% else %}Newest{% endif %}
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="mNavbarSortDropdown">
+              <li><a class="dropdown-item {% if request.GET.sort != 'top' %}active{% endif %}"
+                     href="{% url 'home' %}?q={{ request.GET.q }}&category={{ request.GET.category }}&sort=newest">Newest</a></li>
+              <li><a class="dropdown-item {% if request.GET.sort == 'top' %}active{% endif %}"
+                     href="{% url 'home' %}?q={{ request.GET.q }}&category={{ request.GET.category }}&sort=top">Top</a></li>
+            </ul>
           </li>
+
+          <!-- Create -->
+          {% if user.is_authenticated %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'user_profile' user.username %}">Profile</a>
+            <a class="nav-link" href="{% url 'post_create' %}">
+              <span class="fw-bold" aria-hidden="true">+</span>Create
+            </a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'account_logout' %}">Logout</a>
-          </li>
-        {% else %}
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'account_signup' %}">Register</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'account_login' %}">Login</a>
-          </li>
-        {% endif %}
-      </ul>
+          {% endif %}
+
+          <!-- Account links -->
+          {% if user.is_authenticated %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'saved_posts_list' %}">Bookmarks</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'user_profile' user.username %}">Profile</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'account_logout' %}">Logout</a></li>
+          {% else %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'account_signup' %}">Register</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'account_login' %}">Login</a></li>
+          {% endif %}
+        </ul>
+
+      </div>
     </div>
   </div>
 </nav>
+
+<!-- Checkbox toggles the mobile search bar -->
+<input type="checkbox" id="ppSearchOpen" class="pp-search-checkbox d-lg-none" hidden>
+
+<!-- Mobile full-width search bar -->
+<div id="ppMobileSearchbar" class="pp-mobile-searchbar d-lg-none">
+  <form class="pp-mobile-search" role="search" method="GET" action="{% url 'home' %}">
+    <div class="pp-search-wrap">
+      <i class="fa-solid fa-magnifying-glass pp-search-icon" aria-hidden="true"></i>
+      <label for="m_search_q" class="visually-hidden">Search</label>
+      <input id="m_search_q" class="form-control pp-search-input" type="search" placeholder="Search"
+             name="q" value="{{ request.GET.q }}">
+      {% if request.GET.category %}<input type="hidden" name="category" value="{{ request.GET.category }}">{% endif %}
+      {% if request.GET.sort %}<input type="hidden" name="sort" value="{{ request.GET.sort }}">{% endif %}
+      <label for="ppSearchOpen" class="pp-search-close" aria-label="Close search">&times;</label>
+    </div>
+  </form>
+</div>
