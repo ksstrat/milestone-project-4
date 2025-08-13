@@ -218,6 +218,9 @@ h1, h2, h3, h4, h5, h6,
   max-width: 880px;
   margin-left: auto;
   margin-right: auto;
+
+  /* ensure readable text on dark card */
+  color: var(--text-color);
 }
 
 /* Title links */
@@ -260,4 +263,32 @@ h1, h2, h3, h4, h5, h6,
 /* Compact buttons on very small screens */
 @media (max-width: 575.98px) {
   .pp-card-actions .btn { padding-inline: .5rem; }
+}
+
+/* Post detail */
+
+/* Content typography */
+.pp-post-content p { margin-bottom: 1rem; }
+.pp-post-content img { max-width: 100%; height: auto; border-radius: .25rem; }
+.pp-post-content a { text-decoration: underline; }
+
+/* Comment cards */
+.pp-comment {
+  background-color: #181818;
+  border-color: var(--border-color);
+}
+.pp-comment-body { color: var(--text-color); }
+
+/* Keep actions row readable spacing */
+.pp-card-actions { margin-top: .25rem; }
+
+.pp-post .pp-post-content,
+.pp-post .pp-post-content *:not(.btn):not(.badge) {
+  color: var(--text-color) !important;
+}
+
+/* Comment meta: author + timestamp in secondary color */
+.pp-comment .mb-0 strong,
+.pp-comment .mb-0 .text-muted {
+  color: var(--secondary-color) !important;
 }

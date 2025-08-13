@@ -3,109 +3,163 @@
 
 {% block content %}
 <div class="container mt-4">
-    <div class="card mb-3">
-        <div class="card-body">
-            {% if "placeholder" in post.featured_image.url %}
-                <img src="{% static 'images/default.png' %}" alt="Placeholder image" class="scale">
-            {% else %}
-                <img src="{{ post.featured_image.url }}" alt="{{ post.title }}" class="scale">
-             {% endif %}
-            <h2 class="card-title">{{ post.title }}</h2>
-            {% if post.author == user %}
-                <a href="{% url 'post_edit' post.slug %}" class="btn btn-primary btn-sm">Edit Post</a>
-                <a href="{% url 'post_delete' post.slug %}" class="btn btn-danger btn-sm">Delete Post</a>
-            {% endif %}
-            <p class="card-text d-flex align-items-center">
-                {% if post.author.profile.avatar %}
-                    <img src="{{ post.author.profile.avatar.url }}?c_fill,w_24,h_24,r_max"
-                        class="rounded-circle me-2" width="24" height="24"
-                        alt="{{ post.author.username }} avatar">
-                 {% else %}
-                    <img src="{% static 'images/default-avatar.png' %}"
-                        class="rounded-circle me-2" width="24" height="24"
-                        alt="Default avatar">
-                {% endif %}
-                <span><strong>Author:</strong> {{ post.author }}</span>
-                <span class="mx-2">|</span>
-                <span><strong>Category:</strong> {{ post.category }}</span>
-                <span class="mx-2">|</span>
-                <span><strong>Posted on:</strong> {{ post.created_at|date:"F j, Y" }}</span>
-            </p>
-            <div class="d-flex mt-3">
-                <div>
-                    {% if user.is_authenticated %}
-                    <form action="{% url 'saved_post' post.slug %}" method="post" class="d-inline">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-outline-secondary">
-                            {% if post in user.saved_posts.all %}
-                                Unsave
-                            {% else %}
-                                Save
-                            {% endif %}
-                        </button>
-                    </form>
-                {% endif %}
-                </div>
-                <div class="ms-auto">
-                    {% if user.is_authenticated %}
-                    <form method="post" action="{% url 'vote' post.slug %}" class="d-inline-block">
-                        {% csrf_token %}
-                        <button type="submit" name="vote_type" value="1" 
-                            class="btn btn-sm me-2 {% if user_vote == 1 %}btn-success{% else %}btn-outline-success{% endif %}">
-                            👍
-                        </button>
-                    <span class="fs-4">{{ post.total_votes }}</span>
-                        <button type="submit" name="vote_type" value="-1"
-                            class="btn btn-sm ms-2 {% if user_vote == -1 %}btn-danger{% else %}btn-outline-danger{% endif %}">
-                            👎
-                        </button>
-                    </form>
-                    {% endif %}
-                </div>
-            </div>
-            <hr>
-            <div class="post-content">
-                {{ post.content | safe }}
-            </div>
-            {% if post.url %}
-                <a href="{{ post.url }}" class="btn btn-primary mt-3" target="_blank">Go to link</a>
-            {% endif %}
-            {% if user.is_authenticated %}
-                <h3>Leave a Comment:</h3>
-                <form method="post">
-                    {% csrf_token %}
-                    {{ comment_form.as_p }}
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </form>
-            {% endif %}
-            <h3 class="mt-4">Comments:</h3>
-            {% for comment in comments %}
-                <div class="card mb-2">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center mb-1">
-                            {% if comment.author.profile.avatar %}
-                                <img src="{{ comment.author.profile.avatar.url }}?c_fill,w_24,h_24,r_max"
-                                    class="rounded-circle me-2" width="24" height="24"
-                                    alt="{{ comment.author.username }} avatar">
-                            {% else %}
-                                <img src="{% static 'images/default-avatar.png' %}"
-                                    class="rounded-circle me-2" width="24" height="24"
-                                    alt="Default avatar">
-                            {% endif %}
-                            <p class="mb-0"><strong>{{ comment.author }}</strong>
-                                on {{ comment.created_on|date:"F j, Y" }}</p>
-                        </div>
-                        <p>{{ comment.body | safe }}</p>
-                        {% if comment.author == user %}
-                            <a href="{% url 'comment_edit' comment.pk %}" class="btn btn-primary btn-sm">Edit</a>
-                            <a href="{% url 'comment_delete' comment.pk %}" class="btn btn-danger btn-sm">Delete</a>
-                        {% endif %}
-                    </div>
-                </div>
-            {% empty %}
-                <p>No comments yet.</p>
-            {% endfor %}
+  <div class="card pp-post mb-3">
+    <div class="card-body">
+
+      <!-- Top meta row -->
+      <div class="d-flex justify-content-between align-items-center small text-muted pp-card-meta mb-2">
+        <div>
+          <span class="badge bg-secondary">{{ post.category }}</span>
         </div>
+        <div class="d-flex align-items-center pp-meta-right">
+          {% if post.author.profile.avatar %}
+            <img src="{{ post.author.profile.avatar.url }}?c_fill,w_24,h_24,r_max"
+                 class="rounded-circle me-2" width="24" height="24"
+                 alt="{{ post.author.username }} avatar">
+          {% else %}
+            <img src="{% static 'images/default-avatar.png' %}"
+                 class="rounded-circle me-2" width="24" height="24"
+                 alt="Default avatar">
+          {% endif %}
+          <span class="me-2">{{ post.author }}</span>
+          <span>&middot; {{ post.created_at|date:"Y-m-d" }}</span>
+        </div>
+      </div>
+
+      <!-- Title -->
+      <h2 class="card-title mb-3">
+        {% if post.url %}
+          <a href="{{ post.url }}" target="_blank" rel="noopener">{{ post.title }}</a>
+        {% else %}
+          {{ post.title }}
+        {% endif %}
+      </h2>
+
+      <!-- Media (letterboxed preview) -->
+      <div class="pp-post-media-wrap mb-3">
+        {% if "placeholder" in post.featured_image.url %}
+          <img class="pp-post-media"
+               src="{% static 'images/default.png' %}"
+               alt="Placeholder image">
+        {% else %}
+          <img class="pp-post-media"
+               src="{{ post.featured_image.url }}"
+               alt="{{ post.title }}">
+        {% endif %}
+      </div>
+
+      <!-- Content -->
+      <div class="pp-post-content mb-3">
+        {{ post.content|safe }}
+      </div>
+
+      {% if post.url %}
+        <a href="{{ post.url }}" class="btn btn-primary mb-3" target="_blank" rel="noopener">Open link</a>
+      {% endif %}
+
+      <!-- Bottom actions -->
+      <div class="d-flex justify-content-between align-items-center pp-card-actions mb-2">
+        <div class="d-flex align-items-center gap-2">
+          <a href="#comments" class="btn btn-sm btn-outline-secondary">
+            <i class="fa-regular fa-comment"></i>
+            <span class="ms-1 pp-count">{{ post.approved_comments_count }}</span>
+          </a>
+
+          {% if user.is_authenticated %}
+          <form action="{% url 'saved_post' post.slug %}" method="post" class="d-inline">
+            {% csrf_token %}
+            <button type="submit"
+                    class="btn btn-sm {% if post in user.saved_posts.all %}btn-secondary{% else %}btn-outline-secondary{% endif %}"
+                    aria-label="{% if post in user.saved_posts.all %}Remove bookmark{% else %}Add bookmark{% endif %}">
+              {% if post in user.saved_posts.all %}
+                <i class="fa-solid fa-bookmark"></i>
+              {% else %}
+                <i class="fa-regular fa-bookmark"></i>
+              {% endif %}
+            </button>
+          </form>
+          {% endif %}
+        </div>
+
+        <div class="pp-vote-group">
+          {% if user.is_authenticated %}
+          <form method="post" action="{% url 'vote' post.slug %}" class="d-inline-block">
+            {% csrf_token %}
+            <button type="submit" name="vote_type" value="1"
+                    class="btn btn-sm me-2 {% if user_vote == 1 %}btn-success{% else %}btn-outline-success{% endif %}">
+              <i class="fa-solid fa-circle-up" aria-hidden="true"></i>
+              <span class="visually-hidden">Upvote</span>
+            </button>
+
+            <span class="fs-5 align-middle pp-count">{{ post.total_votes }}</span>
+
+            <button type="submit" name="vote_type" value="-1"
+                    class="btn btn-sm ms-2 {% if user_vote == -1 %}btn-danger{% else %}btn-outline-danger{% endif %}">
+              <i class="fa-solid fa-circle-down" aria-hidden="true"></i>
+              <span class="visually-hidden">Downvote</span>
+            </button>
+          </form>
+          {% else %}
+            <a href="{% url 'account_login' %}" class="btn btn-sm btn-outline-secondary">Log in to vote</a>
+          {% endif %}
+        </div>
+      </div>
+
+      {% if post.author == user %}
+        <div class="mb-3">
+          <a href="{% url 'post_edit' post.slug %}" class="btn btn-primary btn-sm">Edit Post</a>
+          <a href="{% url 'post_delete' post.slug %}" class="btn btn-danger btn-sm">Delete Post</a>
+        </div>
+      {% endif %}
+
+      <hr>
+
+      <!-- Comment form -->
+      {% if user.is_authenticated %}
+        <h3 class="h5">Leave a Comment</h3>
+        <form method="post" class="mb-4">
+          {% csrf_token %}
+          {{ comment_form.as_p }}
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      {% endif %}
+
+      <!-- Comments list -->
+      <h3 id="comments" class="h5">Comments</h3>
+      {% for comment in comments %}
+        <div class="card pp-comment mb-2">
+          <div class="card-body">
+            <div class="d-flex align-items-center mb-1">
+              {% if comment.author.profile.avatar %}
+                <img src="{{ comment.author.profile.avatar.url }}?c_fill,w_24,h_24,r_max"
+                     class="rounded-circle me-2" width="24" height="24"
+                     alt="{{ comment.author.username }} avatar">
+              {% else %}
+                <img src="{% static 'images/default-avatar.png' %}"
+                     class="rounded-circle me-2" width="24" height="24"
+                     alt="Default avatar">
+              {% endif %}
+              <p class="mb-0">
+                <strong>{{ comment.author }}</strong>
+                <span class="text-muted">&middot; {{ comment.created_on|date:"Y-m-d" }}</span>
+              </p>
+            </div>
+            <div class="pp-comment-body">
+              {{ comment.body|safe }}
+            </div>
+            {% if comment.author == user %}
+              <div class="mt-2">
+                <a href="{% url 'comment_edit' comment.pk %}" class="btn btn-primary btn-sm">Edit</a>
+                <a href="{% url 'comment_delete' comment.pk %}" class="btn btn-danger btn-sm">Delete</a>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      {% empty %}
+        <p class="text-muted">No comments yet.</p>
+      {% endfor %}
+
     </div>
+  </div>
 </div>
 {% endblock %}
