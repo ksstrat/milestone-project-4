@@ -1,28 +1,34 @@
 {% extends "base.html" %}
-{% load crispy_forms_tags %}
+{% load static %}
 
 {% block content %}
 <div class="container mt-4">
-    <h1>My Saved Posts</h1>
-    {% if saved_posts %}
-        <div class="row">
-            {% for saved_post in saved_posts %}
-                <div class="col-md-4 mb-4">
-                    <div class="card">
-                        <a href="{% url 'post_detail' saved_post.post.slug %}">
-                            <img src="{{ saved_post.post.featured_image.url }}" class="card-img-top" alt="{{ saved_post.post.title }}">
-                        </a>
-                        <div class="card-body">
-                            <h5 class="card-title">{{ saved_post.post.title }}</h5>
-                            <p class="card-text">{{ saved_post.post.content|truncatechars:100 }}</p>
-                            <a href="{% url 'post_detail' saved_post.post.slug %}" class="btn btn-primary">Read Post</a>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
+  <h1 class="h4 mb-3">My Saved Posts</h1>
+
+  {% if saved_posts %}
+    <div class="row g-3">
+      {% for saved_post in saved_posts %}
+        <div class="col-12 col-sm-6 col-md-4">
+          <div class="card pp-saved-card">
+            <a href="{% url 'post_detail' saved_post.post.slug %}">
+              {% if "placeholder" in saved_post.post.featured_image.url %}
+                <img src="{% static 'images/default.png' %}" class="card-img-top pp-saved-img" alt="Placeholder">
+              {% else %}
+                <img src="{{ saved_post.post.featured_image.url }}" class="card-img-top pp-saved-img" alt="{{ saved_post.post.title }}">
+              {% endif %}
+            </a>
+            <div class="card-body">
+              <h5 class="card-title mb-2">
+                <a href="{% url 'post_detail' saved_post.post.slug %}">{{ saved_post.post.title }}</a>
+              </h5>
+              <p class="card-text mb-0">{{ saved_post.post.content|truncatechars:160 }}</p>
+            </div>
+          </div>
         </div>
-    {% else %}
-        <p>You have not saved any posts yet.</p>
-    {% endif %}
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="text-muted">You have not saved any posts yet.</p>
+  {% endif %}
 </div>
 {% endblock %}

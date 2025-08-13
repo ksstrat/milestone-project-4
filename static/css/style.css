@@ -338,3 +338,45 @@ h1, h2, h3, h4, h5, h6,
 .pp-form .text-muted {
   color: #b5b5b5 !important;
 }
+
+/* Saved posts */
+
+.pp-saved-card {
+  background-color: #1a1a1a;
+  border-color: var(--border-color);
+  color: var(--text-color);
+  height: 320px;
+}
+@media (min-width: 768px) {
+  .pp-saved-card { height: 360px; }
+}
+
+.pp-saved-img {
+  height: 140px;
+  object-fit: cover;
+  object-position: center;
+}
+@media (min-width: 768px) {
+  .pp-saved-img { height: 180px; }
+}
+
+/* Title */
+.pp-saved-card .card-title { margin-bottom: .35rem; }
+.pp-saved-card .card-title a {
+  color: var(--text-color);
+  text-decoration: none;
+  display: block;
+  line-height: 1.3;
+  max-height: calc(1.3em * 2);
+  overflow: hidden;
+}
+.pp-saved-card .card-title a:hover { text-decoration: underline; }
+
+/* Text */
+.pp-saved-card .card-text {
+  color: #cfcfcf;
+  line-height: 1.45;
+  max-height: calc(1.45em * 3);
+  overflow: hidden;
+  margin-bottom: 0;
+}
