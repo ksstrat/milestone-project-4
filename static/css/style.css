@@ -292,3 +292,29 @@ h1, h2, h3, h4, h5, h6,
 .pp-comment .mb-0 .text-muted {
   color: var(--secondary-color) !important;
 }
+
+/* Create */
+
+.pp-form {
+  background-color: #1a1a1a;
+  border-color: var(--border-color);
+  max-width: 880px;
+  margin-left: auto;
+  margin-right: auto;
+  color: var(--text-color);
+}
+
+/* Inputs/Selects/Textareas */
+.pp-form .form-control,
+.pp-form .form-select {
+  background-color: #1a1a1a;
+  color: var(--text-color);
+  border-color: var(--border-color);
+}
+
+/* Focus glow */
+.pp-form .form-control:focus,
+.pp-form .form-select:focus {
+  border-color: var(--secondary-color);
+  box-shadow: none;
+}
