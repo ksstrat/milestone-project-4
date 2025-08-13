@@ -3,11 +3,24 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h2>Edit Post</h2>
-    <form method="post" enctype="multipart/form-data">
+  <div class="card pp-form mb-3">
+    <div class="card-body">
+      <h2 class="h4 mb-3">Edit Post</h2>
+
+      <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form | crispy }}
-        <button type="submit" class="btn btn-primary mt-3">Update Post</button>
-    </form>
+        {{ form|crispy }}
+
+        <div class="mt-3 d-flex gap-2">
+          {% if post %}
+            <a href="{% url 'post_detail' post.slug %}" class="btn btn-secondary">Cancel</a>
+          {% else %}
+            <a href="{% url 'home' %}" class="btn btn-secondary">Cancel</a>
+          {% endif %}
+          <button type="submit" class="btn btn-primary">Update Post</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
 {% endblock %}
