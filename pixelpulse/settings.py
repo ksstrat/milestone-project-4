@@ -72,6 +72,12 @@ SOCIALACCOUNT_PROVIDERS = {
     },
 }
 
+SUMMERNOTE_CONFIG = {
+    'iframe': False,
+    'summernote': {'width': '100%'},
+}
+
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
