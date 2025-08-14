@@ -35,15 +35,17 @@
 
           <!-- Media with preview cap -->
           <div class="pp-post-media-wrap mb-3">
-            {% if "placeholder" in post.featured_image.url %}
-              <img class="pp-post-media"
-                   src="{% static 'images/default.png' %}"
-                   alt="Placeholder image">
-            {% else %}
-              <img class="pp-post-media"
-                   src="{{ post.featured_image.url }}"
-                   alt="{{ post.title }}">
-            {% endif %}
+            <a href="{% url 'post_detail' post.slug %}">
+              {% if "placeholder" in post.featured_image.url %}
+                <img class="pp-post-media"
+                    src="{% static 'images/default.png' %}"
+                    alt="Placeholder image">
+              {% else %}
+                <img class="pp-post-media"
+                    src="{{ post.featured_image.url }}"
+                    alt="{{ post.title }}">
+              {% endif %}
+            </a>
           </div>
 
           <!-- Bottom actions -->
