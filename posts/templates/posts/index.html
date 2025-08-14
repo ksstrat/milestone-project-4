@@ -30,11 +30,7 @@
 
           <!-- Title -->
           <h5 class="card-title mb-3">
-            {% if post.url %}
-              <a href="{{ post.url }}" target="_blank" rel="noopener">{{ post.title }}</a>
-            {% else %}
               <a href="{% url 'post_detail' post.slug %}">{{ post.title }}</a>
-            {% endif %}
           </h5>
 
           <!-- Media with preview cap -->
