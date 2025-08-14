@@ -4,21 +4,29 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h2 class="mb-3">Create your account</h2>
+  <div class="card pp-form mb-3">
+    <div class="card-body">
+      <h2 class="h4 mb-3">Create your account</h2>
 
-    <!-- Social sign-up -->
-    {% providers_media_js %}
-    <div class="mb-3">
+      <!-- Social sign-up -->
+      {% providers_media_js %}
+      <div class="mb-3">
         {% include "socialaccount/snippets/provider_list.html" with process="signup" %}
-    </div>
+      </div>
 
-    <hr class="my-4">
+      <div class="text-center text-muted my-3">or</div>
 
-    <!-- Regular sign-up form -->
-    <form method="post" action="{% url 'account_signup' %}">
+      <!-- Regular sign-up form -->
+      <form method="post" action="{% url 'account_signup' %}">
         {% csrf_token %}
         {{ form|crispy }}
         <button class="btn btn-primary mt-2" type="submit">Sign up</button>
-    </form>
+      </form>
+
+      <p class="mt-3 mb-0">
+        Already have an account? <a href="{% url 'account_login' %}">Sign in</a>
+      </p>
+    </div>
+  </div>
 </div>
 {% endblock %}

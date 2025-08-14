@@ -380,3 +380,14 @@ h1, h2, h3, h4, h5, h6,
   overflow: hidden;
   margin-bottom: 0;
 }
+
+/* Login/Signup /*
+
+/* Placeholder and help text color in forms */
+.pp-form .form-control::placeholder {
+  color: #b5b5b5;
+}
+
+/* Crispy Forms help text */
+.pp-form .form-text {
+  color: #b5b5b5;
