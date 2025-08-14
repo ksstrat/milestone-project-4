@@ -1,56 +1,64 @@
 {% extends "base.html" %}
+
 {% block title %}Privacy Policy · PixelPulse{% endblock %}
+
 {% block content %}
 <div class="container py-4">
-  <h1 class="mb-3">Privacy Policy</h1>
-  <p class="text-muted">Last updated: August 2025</p>
+  <div class="card pp-post">
+    <div class="card-body">
+      <h1 class="mb-2">Privacy Policy</h1>
+      <p class="text-muted mb-4">Last updated: August 2025</p>
 
-  <p>
-    PixelPulse uses social login (Google, Facebook and x) to
-    authenticate users. This page explains what we collect, why, and how you can
-    contact us about your data.
-  </p>
+      <div class="pp-post-content">
+        <p>
+          PixelPulse uses social login (Google, Facebook and x) to authenticate users.
+          This page explains what we collect, why, and how you can contact us about your data.
+        </p>
 
-  <h2 class="h5 mt-4">Information We Collect</h2>
-  <ul>
-    <li>Your email address and a unique account identifier provided by the social provider.</li>
-    <li>Your username (generated or provided by the social login).</li>
-    <li>Optional content you submit on the site (e.g., posts, comments, profile picture).</li>
-  </ul>
+        <h2 class="h5 mt-4">Information We Collect</h2>
+        <ul>
+          <li>Your email address and a unique account identifier provided by the social provider.</li>
+          <li>Your username (generated or provided by the social login).</li>
+          <li>Optional content you submit on the site (e.g., posts, comments, profile picture).</li>
+        </ul>
 
-  <h2 class="h5 mt-4">How We Use Your Information</h2>
-  <ul>
-    <li>To authenticate you and maintain your account/session.</li>
-    <li>To display your profile and user-generated content on PixelPulse.</li>
-    <li>To communicate important service messages (e.g., security or account notices).</li>
-  </ul>
+        <h2 class="h5 mt-4">How We Use Your Information</h2>
+        <ul>
+          <li>To authenticate you and maintain your account/session.</li>
+          <li>To display your profile and user-generated content on PixelPulse.</li>
+          <li>To communicate important service messages (e.g., security or account notices).</li>
+        </ul>
 
-  <h2 class="h5 mt-4">Sharing</h2>
-  <p>
-    We do not sell your data. We may share data if required by law or to protect
-    our service against abuse and fraud.
-  </p>
+        <h2 class="h5 mt-4">Sharing</h2>
+        <p>
+          We do not sell your data. We may share data if required by law or to protect
+          our service against abuse and fraud.
+        </p>
 
-  <h2 class="h5 mt-4">Retention</h2>
-  <p>
-    We keep your account data while your account is active. You can request deletion
-    at any time (see <a href="{% url 'data_deletion' %}">Data Deletion</a>).
-  </p>
+        <h2 class="h5 mt-4">Retention</h2>
+        <p>
+          We keep your account data while your account is active. You can request deletion
+          at any time (see <a href="{% url 'data_deletion' %}">Data Deletion</a>).
+        </p>
 
-  <h2 class="h5 mt-4">Cookies</h2>
-  <p>
-    We use essential cookies (e.g., session cookies) required for login and basic functionality.
-  </p>
+        <h2 class="h5 mt-4">Cookies</h2>
+        <p>
+          We use essential cookies (e.g., session cookies) required for login and basic functionality.
+        </p>
 
-  <h2 class="h5 mt-4">Your Rights</h2>
-  <p>
-    You can request access, correction, or deletion of your personal data. Contact us using
-    the email below.
-  </p>
+        <h2 class="h5 mt-4">Your Rights</h2>
+        <p>
+          You can request access, correction, or deletion of your personal data. Contact us using
+          the email below.
+        </p>
 
-  <h2 class="h5 mt-4">Contact</h2>
-  <p>
-    For privacy questions or requests, email: <a href="mailto:qpvgrwku@students.codeinstitute.net">contact@pixelpulseadmin.com</a>.
-  </p>
+        <h2 class="h5 mt-4">Contact</h2>
+        <p>
+          For privacy questions or requests, email:
+          <a href="mailto:qpvgrwku@students.codeinstitute.net">contact@pixelpulseadmin.com</a>.
+        </p>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}
