@@ -21,7 +21,7 @@
                  class="rounded-circle me-2" width="24" height="24"
                  alt="Default avatar">
           {% endif %}
-          <span class="me-2">{{ post.author }}</span>
+          <span class="me-2"><a href="{% url 'user_profile' post.author.username %}">{{ post.author }}</a></span>
           <span>&middot; {{ post.created_at|date:"Y-m-d" }}</span>
         </div>
       </div>
