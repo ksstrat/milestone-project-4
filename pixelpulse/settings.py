@@ -70,6 +70,10 @@ SOCIALACCOUNT_PROVIDERS = {
         'SCOPE': ['email'],
         'FIELDS': ['id','email','name'],
     },
+    'twitter_oauth2': {
+        "SCOPE": ["users.read"],
+        "VERIFIED_EMAIL": False,
+    },
 }
 
 SUMMERNOTE_CONFIG = {
