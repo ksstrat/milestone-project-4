@@ -1,0 +1,52 @@
+/* Summernote - Dark Theme */
+.panel-heading.note-toolbar {
+    border: 1px solid #333;
+    background-color: #222;
+}
+
+.resize-sensor{
+    background-color: #222;
+    border-bottom: 1px solid #333;
+}
+
+.note-toolbar {
+    background-color: #333;
+    color: #fff;
+    border-color: #444;
+}
+
+.note-toolbar .btn-default {
+    background-color: #333;
+    color: #fff;
+    border-color: #444;
+}
+
+.note-toolbar .btn-default:hover {
+    background-color: #444;
+    color: #fff;
+}
+
+.note-editable {
+    background-color: #121212;
+    color: #fff;
+}
+
+.note-statusbar {
+    background-color: #222;
+    border-top: 1px solid #333;
+}
+
+.note-resizebar {
+    border: 1px solid #333;
+    background-color: #222;
+}
+
+.note-status-output {
+    border: 1px solid #333;
+    background-color: #222;
+}
+
+.note-editor.note-frame.panel.panel-default {
+    border: 1px solid #333;
+    background-color: #222;
+}
