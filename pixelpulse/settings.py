@@ -181,6 +181,7 @@ SITE_ID = int(os.environ.get("SITE_ID", 2))
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 ACCOUNT_EMAIL_VERIFICATION = 'none'
+EMAIL_BACKEND = "django.core.mail.backends.dummy.EmailBackend"
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
