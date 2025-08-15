@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load socialaccount %}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="card pp-form mb-3">
+    <div class="card-body">
+      <h2 class="h4 mb-3">Complete your sign up</h2>
+      <p class="text-muted">
+        We need a couple more details to finish creating your account{% if provider %} with
+        <strong>{{ provider.name }}</strong>{% endif %}.
+      </p>
+
+      <form method="post" action="{% url 'socialaccount_signup' %}">
+        {% csrf_token %}
+        {{ form|crispy }}
+
+        {% if redirect_field_value %}
+          <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}">
+        {% endif %}
+
+        <div class="d-flex gap-2 mt-2">
+          <a href="{% url 'account_login' %}" class="btn btn-secondary">
+            <i class="fa-solid fa-arrow-left me-2" aria-hidden="true"></i>Back to Sign in
+          </a>
+          <button type="submit" class="btn btn-primary">
+            Continue
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
