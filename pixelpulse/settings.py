@@ -84,6 +84,9 @@ SOCIALACCOUNT_PROVIDERS = {
 SUMMERNOTE_CONFIG = {
     'iframe': False,
     'summernote': {'width': '100%'},
+    'css': (
+        '/static/css/dark-summernote.css',
+    ),
 }
 
 
