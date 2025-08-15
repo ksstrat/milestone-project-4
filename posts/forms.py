@@ -1,6 +1,7 @@
 import os
 from django import forms
 from django.core.exceptions import ValidationError
+from django.core.files.uploadedfile import UploadedFile
 from django_summernote.widgets import SummernoteWidget
 from .models import Comment, Vote, Post, Profile
 from django.contrib.auth.models import User
@@ -27,10 +28,19 @@ class PostForm(forms.ModelForm):
             'featured_image': forms.ClearableFileInput(attrs={'accept': 'image/*'}),
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Do not require a new upload on edit; keep existing image if left blank
+        self.fields["featured_image"].required = False
+
     def clean_featured_image(self):
         # Validate uploaded image (MIME, extension,Pillow verify)
         f = self.cleaned_data.get('featured_image')
         if not f:
+            return f
+        
+        # Only validate brand-new uploads
+        if not isinstance(f, UploadedFile):
             return f
 
         ct = getattr(f, 'content_type', '') or ''
