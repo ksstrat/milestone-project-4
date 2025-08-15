@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}500 — Server Error · PixelPulse{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="card pp-post text-center">
+    <div class="card-body py-5">
+      <h1 class="display-5 mb-2">500</h1>
+      <p class="lead mb-3">Something went wrong.</p>
+      <p class="text-muted mb-4">
+        Please try again in a moment. If this keeps happening, go back to the homepage.
+      </p>
+      <div class="d-flex flex-column flex-sm-row gap-2 justify-content-center">
+        <a href="{% url 'home' %}" class="btn btn-primary">
+          <i class="fa-solid fa-house me-2" aria-hidden="true"></i>Go to Homepage
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
