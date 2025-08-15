@@ -186,7 +186,14 @@ class PostUpdate(UserPassesTestMixin, UpdateView):
         Sets the author of the post to the current user before saving.
         """
         form.instance.author = self.request.user
-        return super().form_valid(form)
+        try:
+            response = super().form_valid(form)
+        except Exception:
+            form.add_error('featured_image', "Upload failed. Please use a valid image (JPG, PNG, GIF, WEBP).")
+            messages.error(self.request, "Please fix the errors below.")
+            return self.form_invalid(form)
+        messages.success(self.request, 'Your post has been submitted and is awaiting approval.')
+        return response
     
     def test_func(self):
         """
