@@ -193,12 +193,18 @@ class PostUpdate(UserPassesTestMixin, UpdateView):
         """
         form.instance.author = self.request.user
         try:
+            if not self.request.user.is_staff and self.object.status == 1:
+                form.instance.status = 0
             response = super().form_valid(form)
         except Exception:
             form.add_error('featured_image', "Upload failed. Please use a valid image (JPG, PNG, GIF, WEBP).")
             messages.error(self.request, "Please fix the errors below.")
             return self.form_invalid(form)
-        messages.success(self.request, 'Your post has been submitted and is awaiting approval.')
+        
+        if getattr(self.object, "status", None) == 0 and not self.request.user.is_staff:
+            messages.success(self.request, "Your changes were submitted and are awaiting approval.")
+        else:
+            messages.success(self.request, "Post updated.")
         return response
     
     def test_func(self):
