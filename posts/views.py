@@ -160,8 +160,14 @@ class PostCreate(CreateView):
         Sets the author of the post to the current user and adds a success message.
         """
         form.instance.author = self.request.user
+        try:
+            response = super().form_valid(form)
+        except Exception:
+            form.add_error('featured_image', "Upload failed. Please use a valid image (JPG, PNG, GIF, WEBP).")
+            messages.error(self.request, "Please fix the errors below.")
+            return self.form_invalid(form)
         messages.success(self.request, 'Your post has been submitted and is awaiting approval.')
-        return super().form_valid(form)
+        return response
     
 @method_decorator(login_required, name='dispatch')
 class PostUpdate(UserPassesTestMixin, UpdateView):
