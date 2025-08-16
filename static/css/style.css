@@ -11,6 +11,11 @@
   --font-heading: "Poppins", sans-serif;
 }
 
+/* General style for all muted text to ensure readability */
+.text-muted {
+  color: #b5b5b5 !important;
+}
+
 /* Ensure full-height layout for sticky footer */
 html, body { height: 100%; }
 
