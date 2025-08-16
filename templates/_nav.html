@@ -5,10 +5,10 @@
     <!-- Mobile controls: search icon (checkbox toggle) + burger -->
     <div class="d-flex align-items-center ms-auto">
       <label for="ppSearchOpen"
-            class="nav-link p-0 text-white d-lg-none me-2 pp-search-toggle"
-            role="button" tabindex="0"
-            title="Search" aria-label="Open search"
-            aria-controls="ppMobileSearchbar">
+             class="nav-link p-0 text-white d-lg-none me-2 pp-search-toggle"
+             role="button" tabindex="0"
+             title="Search" aria-label="Open search"
+             aria-controls="ppMobileSearchbar">
         <i class="fa-solid fa-magnifying-glass"></i>
       </label>
 
@@ -19,15 +19,14 @@
       </button>
     </div>
 
-    <!-- Collapse wraps desktop + mobile menus -->
+    <!-- desktop & mobile menus -->
     <div class="collapse navbar-collapse" id="navbarNav">
-      <!-- Flex row on desktop so center + right can coexist -->
-      <div class="d-lg-flex align-items-center w-100">
+      <!-- grid (desktop): [leftbar | rightbar] -->
+      <div class="pp-grid w-100 align-items-center">
 
-        <!-- DESKTOP: centered trio [Category/Sort] [Search] [+create] -->
-        <div class="pp-desktopbar d-none d-lg-flex align-items-center justify-content-center mx-lg-auto">
-          <!-- Left: Category + Sort -->
-          <ul class="navbar-nav pp-left">
+        <!-- DESKTOP: left-side categories, sort, +create -->
+        <div class="pp-leftbar d-none d-lg-flex align-items-center">
+          <ul class="navbar-nav me-2">
             <!-- Category dropdown -->
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
@@ -69,19 +68,6 @@
             </li>
           </ul>
 
-          <!-- Center: search (wide pill, no button) -->
-          <form class="pp-search my-2 my-lg-0" role="search" method="GET" action="{% url 'home' %}">
-            <div class="pp-search-wrap">
-              <i class="fa-solid fa-magnifying-glass pp-search-icon" aria-hidden="true"></i>
-              <label for="search_q" class="visually-hidden">Search</label>
-              <input id="search_q" class="form-control pp-search-input" type="search" placeholder="Search"
-                     name="q" value="{{ request.GET.q }}">
-              {% if request.GET.category %}<input type="hidden" name="category" value="{{ request.GET.category }}">{% endif %}
-              {% if request.GET.sort %}<input type="hidden" name="sort" value="{{ request.GET.sort }}">{% endif %}
-            </div>
-          </form>
-
-          <!-- Right (in trio): +Create -->
           {% if user.is_authenticated %}
             <div class="pp-create">
               <a class="btn btn-primary btn-sm pp-create-btn"
@@ -93,17 +79,32 @@
           {% endif %}
         </div>
 
-        <!-- DESKTOP: right-side account/bookmark links -->
-        <ul class="navbar-nav d-none d-lg-flex ms-lg-auto align-items-lg-center gap-lg-2">
-          {% if user.is_authenticated %}
-            <li class="nav-item"><a class="nav-link" href="{% url 'saved_posts_list' %}">Bookmarks</a></li>
-            <li class="nav-item"><a class="nav-link" href="{% url 'user_profile' user.username %}">Profile</a></li>
-            <li class="nav-item"><a class="nav-link" href="{% url 'account_logout' %}">Logout</a></li>
-          {% else %}
-            <li class="nav-item"><a class="nav-link" href="{% url 'account_signup' %}">Register</a></li>
-            <li class="nav-item"><a class="nav-link" href="{% url 'account_login' %}">Login</a></li>
-          {% endif %}
-        </ul>
+        <!-- DESKTOP: right-side searchbar/bookmarks/profile/logout -->
+        <div class="pp-rightbar d-none d-lg-flex align-items-center ms-lg-auto">
+          <!-- Search -->
+          <form class="pp-search my-2 my-lg-0 me-lg-2" role="search" method="GET" action="{% url 'home' %}">
+            <div class="pp-search-wrap">
+              <i class="fa-solid fa-magnifying-glass pp-search-icon" aria-hidden="true"></i>
+              <label for="search_q" class="visually-hidden">Search</label>
+              <input id="search_q" class="form-control pp-search-input" type="search" placeholder="Search"
+                     name="q" value="{{ request.GET.q }}">
+              {% if request.GET.category %}<input type="hidden" name="category" value="{{ request.GET.category }}">{% endif %}
+              {% if request.GET.sort %}<input type="hidden" name="sort" value="{{ request.GET.sort }}">{% endif %}
+            </div>
+          </form>
+
+          <!-- account/bookmarks -->
+          <ul class="navbar-nav align-items-lg-center gap-lg-2">
+            {% if user.is_authenticated %}
+              <li class="nav-item"><a class="nav-link" href="{% url 'saved_posts_list' %}">Bookmarks</a></li>
+              <li class="nav-item"><a class="nav-link" href="{% url 'user_profile' user.username %}">Profile</a></li>
+              <li class="nav-item"><a class="nav-link" href="{% url 'account_logout' %}">Logout</a></li>
+            {% else %}
+              <li class="nav-item"><a class="nav-link" href="{% url 'account_signup' %}">Register</a></li>
+              <li class="nav-item"><a class="nav-link" href="{% url 'account_login' %}">Login</a></li>
+            {% endif %}
+          </ul>
+        </div>
 
         <!-- MOBILE: single vertical list inside the burger -->
         <ul class="navbar-nav d-lg-none w-100 pp-mobilemenu">
