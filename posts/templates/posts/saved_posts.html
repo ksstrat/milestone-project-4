@@ -21,7 +21,7 @@
               <h5 class="card-title mb-2">
                 <a href="{% url 'post_detail' saved_post.post.slug %}">{{ saved_post.post.title }}</a>
               </h5>
-              <p class="card-text mb-0">{{ saved_post.post.content|truncatechars:160|safe }}</p>
+              <p class="card-text mb-0">{{ saved_post.post.content|striptags|truncatechars:160|safe }}</p>
             </div>
           </div>
         </div>
