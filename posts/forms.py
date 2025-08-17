@@ -25,7 +25,7 @@ class PostForm(forms.ModelForm):
         fields = ('title', 'category', 'content', 'featured_image', 'url')
         widgets = {
             'content': SummernoteWidget(),
-            'featured_image': forms.ClearableFileInput(attrs={'accept': 'image/*'}),
+            'featured_image': forms.FileInput(attrs={'accept': 'image/*'}),
         }
 
     def __init__(self, *args, **kwargs):
