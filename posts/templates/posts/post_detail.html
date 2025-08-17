@@ -31,7 +31,7 @@
       
       <!-- Awaiting-approval notice -->
       {% if user.is_authenticated and user == post.author and post.status != 1 %}
-        <div class="alert alert-warning py-2 mb-3 d-flex align-items-center gap-2">
+        <div class="alert pp-alert-approval py-2 mb-3 d-flex align-items-center gap-2">
           <i class="fa-solid fa-hourglass-half" aria-hidden="true"></i>
           <span>This post is not public yet (awaiting approval).</span>
         </div>

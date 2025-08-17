@@ -388,3 +388,8 @@ h1, h2, h3, h4, h5, h6,
 .pp-form .form-text {
   color: #b5b5b5;
 }
+
+.pp-alert-approval {
+  color: #1a1a1a;
+  background-color: var(--secondary-color);
+}
