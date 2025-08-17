@@ -78,6 +78,7 @@ SOCIALACCOUNT_PROVIDERS = {
     'twitter_oauth2': {
         "SCOPE": ["users.read"],
         "VERIFIED_EMAIL": False,
+        "OAUTH_PKCE_ENABLED": True,
     },
 }
 
