@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import Category, Post, Comment, Vote, Profile
 from django_summernote.admin import SummernoteModelAdmin
+from django.utils.html import format_html
 
 class PostAdmin(SummernoteModelAdmin):
     list_display = ('title', 'slug', 'status', 'created_at')
@@ -11,13 +12,21 @@ class PostAdmin(SummernoteModelAdmin):
 
 @admin.register(Comment)
 class CommentAdmin(SummernoteModelAdmin):
-    list_display = ('author', 'body', 'post', 'created_on', 'approved')
+    list_display = ('author', 'display_body_formatted', 'post', 'created_on', 'approved')
     list_filter = ('approved', 'created_on')
     search_fields = ('author__username', 'body')
     actions = ['approve_comments']
 
     def approve_comments(self, request, queryset):
         queryset.update(approved=True)
+
+    def display_body_formatted(self, obj):
+        """ 
+        Formats the comment body as HTML and truncates it for a cleaner admin overview.
+        """
+        return format_html(obj.body[:150] + '...' if len(obj.body) > 150 else obj.body)
+    
+    display_body_formatted.short_description = 'Comment'
 
 @admin.register(Vote)
 class VoteAdmin(admin.ModelAdmin):
