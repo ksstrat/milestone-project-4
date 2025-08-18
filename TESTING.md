@@ -490,7 +490,42 @@ The CSS code was free of errors.
 
 ## PEP8:
 
+All files have been successfully checked with the CI Python Linter and are PEP8 compliant.
+
 [PEP8 Va](https://pep8ci.herokuapp.com):
+
+posts/admin.py:
+
+![posts/admin.py](docs/validators/cipythonlinter/posts_admin_py.png)
+
+posts/app.py
+
+![posts/app.py](docs/validators/cipythonlinter/posts_app_py.png)
+
+posts/forms.py
+
+![posts/forms.py](docs/validators/cipythonlinter/posts_forms_py.png)
+
+posts/models.py
+
+![posts/models.py](docs/validators/cipythonlinter/posts_models_py.png)
+
+posts/urls.py
+
+![posts/urls.py](docs/validators/cipythonlinter/posts_url_py.png)
+
+posts/views.py
+
+![posts/views.py](docs/validators/cipythonlinter/posts_views_py.png)
+
+pixelpulse/settings.py
+
+![pixelpulse/settings.py](docs/validators/cipythonlinter/settings_py.png)
+
+pixelpulse/urls.py
+
+![pixelpulse/urls.py](docs/validators/cipythonlinter/urls_py.png)
+
 
 # **Manual testing**:
 
