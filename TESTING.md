@@ -476,6 +476,10 @@ In hands-on use on both Android and iOS, I didn’t observe any noticeable perfo
 # **Validators**
 ## HTML:
 
+I validated the HTML using the W3C HTML Validator. Because the project uses Django’s template syntax ({% … %}, {{ … }}), the raw template files produced false errors the validator can’t interpret. When validating the rendered pages from the running app, no significant HTML issues were found.
+
+![HTML Validation](docs/validators/html_validation.png)
+
 ## CSS:
 
 [CSS Valiation](https://jigsaw.w3.org/css-validator/validator.html.en)
