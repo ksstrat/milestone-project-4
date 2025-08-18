@@ -760,9 +760,9 @@ Provides consistent navigation across devices. The layout is responsive, availab
 
 ### 500 internal server error
 ### Desktop
-![Desktop 500 internal server error]
+![Desktop 500 internal server error](docs/screenshots/desktop/500_desktop.png)
 ### Mobile
-![Mobile 500 internal server error]
+![Mobile 500 internal server error](docs/screenshots/mobile/500_mobile.png)
 
 ### Authentication error
 * If an error occurs during a social login attempt, the user will be informed.
