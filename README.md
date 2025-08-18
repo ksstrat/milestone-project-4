@@ -403,7 +403,7 @@ The palette consists of five main colors:
 With Poppins for the headings and Lato for the body text, I chose a font combination that ensures both a modern aesthetic and excellent readability, especially in the dark theme.
 
 ## **Agile Methodology**
-To support the agile development process, I used [GitHub Projects](https://github.com/users/ksstrat/projects/8) to ensure organization and progress management. The issues derived from the user stories were managed in a Kanban board with the columns “To Do,” “In Progress,” and “Done.” The iterations were also recorded in a separate file that you can find [here](AGILE.md). This allowed me to maintain an overview at all times, focus on the essentials, and drive the project forward in a targeted manner.
+To support the agile development process, I used [GitHub Projects](https://github.com/users/ksstrat/projects/8) to ensure organization and progress management. The issues derived from the user stories were managed in a Kanban board with the columns “To Do,” “In Progress,” and “Done.” The iterations were also recorded in a separate file that you can find in [AGILE.md](AGILE.md). This allowed me to maintain an overview at all times, focus on the essentials, and drive the project forward in a targeted manner.
 
 # **Features**
 
@@ -856,7 +856,7 @@ For detailed instructions on how to set up and deploy your own instance of this 
 * The project drew inspiration from the Code Institute's code-along project “I Think Therefore I Blog” and the Portfolio 4 Assessment Guide. Although I aimed to deviate as much as possible, there may still be some similarities in the code structure.
 * The design is inspired by the social platform reddit.
 * Throughout the project, I used several documentations in particular Django, Python, bootstrap, w3schools as primary resources for guidance and reference.
-* The YouTube channels Cloud With Django, JimShapedCoding and Andreas Jud
+* The YouTube channels [Cloud With Django](https://www.youtube.com/@CloudWithDjango), [JimShapedCoding](https://www.youtube.com/@jimshapedcoding) and [Andreas Jud](https://www.youtube.com/@ajudmeister) were a great help with social auth and other Django topics.
 * Special thanks go to my numerous beta testers, who are friends, family and relatives.
 
 ### **Media:**
