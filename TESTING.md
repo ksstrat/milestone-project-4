@@ -488,6 +488,24 @@ The CSS code was free of errors.
 
 [JS Validation](https://jshint.com)
 
+![Metrics](docs/validators/jshint_metrics.png)
+
+JShint initially gave me three warnings:
+
+![First Warning](docs/validators/jshint_warnings.png)
+
+I have identified most of these errors.
+
+- Missing "use strict" — added 'use strict'; at the top of the script.
+- Undefined global bootstrap — declared it for JSHint with /* global bootstrap */.
+- “Optional catch binding” requires ES2019 — enabled ES2019 in JSHint via /* jshint esversion: 10 */.
+
+But after this adjustments, i got a new error:
+
+![Second Warning](docs/validators/jshint_new_warning.png)
+
+I identified this as a configuration error in the tool. I therefore did not make any further adjustments to the JavaScript.
+
 ## PEP8:
 
 All files have been successfully checked with the CI Python Linter and are PEP8 compliant.
