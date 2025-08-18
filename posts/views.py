@@ -525,6 +525,8 @@ class SavedPostView(View):
                 "Post has been saved.",
             )
 
+        return redirect("post_detail", slug=slug)
+
 
 @method_decorator(login_required, name="dispatch")
 class SavedPostListView(View):
