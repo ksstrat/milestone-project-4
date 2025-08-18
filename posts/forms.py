@@ -19,6 +19,7 @@ except Exception:
 # Allowed image extensions
 ALLOWED_EXTS = {".jpg", ".jpeg", ".png", ".gif", ".webp"}
 
+
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
@@ -30,7 +31,8 @@ class PostForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Do not require a new upload on edit; keep existing image if left blank
+        # Do not require a new upload on edit;
+        # keep existing image if left blank
         self.fields["featured_image"].required = False
 
     def clean_featured_image(self):
@@ -38,25 +40,31 @@ class PostForm(forms.ModelForm):
         f = self.cleaned_data.get('featured_image')
         if not f:
             return f
-        
+
         # Only validate brand-new uploads
         if not isinstance(f, UploadedFile):
             return f
 
         ct = getattr(f, 'content_type', '') or ''
         if not ct.startswith('image/'):
-            raise ValidationError("Please upload an image file (JPG, PNG, GIF, WEBP).")
+            raise ValidationError(
+                "Please upload an image file (JPG, PNG, GIF, WEBP)."
+            )
 
         ext = os.path.splitext(f.name)[1].lower()
         if ext not in ALLOWED_EXTS:
-            raise ValidationError("Unsupported file type. Allowed: JPG, PNG, GIF, WEBP.")
+            raise ValidationError(
+                "Unsupported file type. Allowed: JPG, PNG, GIF, WEBP."
+            )
 
         if PIL_AVAILABLE:
             try:
                 img = Image.open(f)
                 img.verify()
             except UnidentifiedImageError:
-                raise ValidationError("The uploaded file is not a valid image or is corrupted.")
+                raise ValidationError(
+                    "The uploaded file is not a valid image or is corrupted."
+                )
             finally:
                 try:
                     f.seek(0)
@@ -64,6 +72,7 @@ class PostForm(forms.ModelForm):
                     pass
 
         return f
+
 
 class CommentForm(forms.ModelForm):
     class Meta:
@@ -73,10 +82,12 @@ class CommentForm(forms.ModelForm):
             'body': SummernoteWidget()
         }
 
+
 class VoteForm(forms.ModelForm):
     class Meta:
         model = Vote
         fields = ('vote_type',)
+
 
 class ProfileUpdateForm(forms.ModelForm):
     email = forms.EmailField(required=True)
@@ -84,6 +95,7 @@ class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['email']
+
 
 class ProfileForm(forms.ModelForm):
     class Meta:

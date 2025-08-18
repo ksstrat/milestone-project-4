@@ -26,20 +26,30 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+
 # Model for posts
 class Post(models.Model):
-    """
-    Model representing a user-created post on PixelPulse.
-    """
+    """Model representing a user-created post on PixelPulse."""
     title = models.CharField(max_length=200, unique=True)
     slug = models.SlugField(max_length=200, unique=True)
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="posts")
+    author = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="posts",
+    )
     content = models.TextField(blank=True)
     url = models.URLField(blank=True, null=True)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="posts")
+    category = models.ForeignKey(
+        Category,
+        on_delete=models.CASCADE,
+        related_name="posts",
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    status = models.IntegerField(choices=((0, 'Draft'), (1, 'Published')), default=0)
+    status = models.IntegerField(
+        choices=((0, 'Draft'), (1, 'Published')),
+        default=0,
+    )
     featured_image = CloudinaryField('image', default='placeholder')
 
     def get_absolute_url(self):
@@ -47,8 +57,11 @@ class Post(models.Model):
 
     @property
     def total_votes(self):
-        return self.votes.aggregate(total_votes=Sum('vote_type'))['total_votes'] or 0
-    
+        return (
+            self.votes.aggregate(total_votes=Sum('vote_type'))['total_votes']
+            or 0
+        )
+
     @property
     def approved_comments_count(self):
         return self.comments.filter(approved=True).count()
@@ -76,13 +89,22 @@ class Post(models.Model):
                 return 0
         return 0
 
+
 # Model for comments
 class Comment(models.Model):
     """
     Model representing a user comment on a post.
     """
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="commenter")
+    post = models.ForeignKey(
+        Post,
+        on_delete=models.CASCADE,
+        related_name="comments",
+    )
+    author = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="commenter",
+    )
     body = models.TextField()
     approved = models.BooleanField(default=False)
     created_on = models.DateTimeField(auto_now_add=True)
@@ -92,26 +114,44 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"Comment {self.body[:50]} by {self.author}"
-    
-# Model for upvotes and downvotes on posts 
+
+
+# Model for upvotes and downvotes on posts
 class Vote(models.Model):
     """
     Model representing an upvote or downvote on a post.
     """
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="votes")
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="votes")
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="votes",
+    )
+    post = models.ForeignKey(
+        Post,
+        on_delete=models.CASCADE,
+        related_name="votes",
+    )
     vote_type = models.SmallIntegerField()
 
     class Meta:
         unique_together = ('user', 'post')
+
 
 # Model for saved posts
 class SavedPost(models.Model):
     """
     Model representing a saved post (bookmark) by a user.
     """
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='saved_posts')
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='saved_by_users')
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='saved_posts',
+    )
+    post = models.ForeignKey(
+        Post,
+        on_delete=models.CASCADE,
+        related_name='saved_by_users',
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -121,13 +161,18 @@ class SavedPost(models.Model):
     def __str__(self):
         return f"{self.user.username} saved {self.post.title}"
 
-# Model for user profiles    
+
+# Model for user profiles
 class Profile(models.Model):
     """
     Model that holds additional user information (profile picture).
     It extends Django's built-in User model.
     """
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name='profile',
+    )
     avatar = CloudinaryField('image', blank=True, null=True)
     updated_at = models.DateTimeField(auto_now=True)
 
