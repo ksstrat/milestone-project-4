@@ -111,7 +111,9 @@
             </button>
           </form>
           {% else %}
-            <a href="{% url 'account_login' %}" class="btn btn-sm btn-outline-secondary">Log in to vote</a>
+            <a href="{% url 'account_login' %}" class="btn btn-sm btn-primary">
+              Log in to vote
+            </a>
           {% endif %}
         </div>
       </div>
